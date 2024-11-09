@@ -44,4 +44,14 @@ export interface Order {
   total: number;
   status: 'pending' | 'processing' | 'shipped' | 'delivered';
   createdAt: Date;
+}
+
+export interface LoginCredentials {
+  email: string;
+  password: string;
+}
+
+export interface AuthResponse {
+  user: User;
+  token: string;
 } 

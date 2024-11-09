@@ -1,31 +1,9 @@
-import api from '../config/axios';
-import { User, ErrorResponse } from '../types';
-
-interface LoginResponse {
-  user: User;
-  token: string;
-}
+import axios from '../config/axios';
+import { LoginCredentials, AuthResponse } from '../types';
 
 export const authService = {
-  async login(email: string, password: string): Promise<User> {
-    try {
-      const { data } = await api.post<LoginResponse>('/api/auth/login', {
-        email,
-        password,
-      });
-      localStorage.setItem('token', data.token);
-      return data.user;
-    } catch (err) {
-      const error = err as ErrorResponse;
-      throw new Error(error.message || 'Login failed');
-    }
-  },
-
-  async logout(): Promise<void> {
-    localStorage.removeItem('token');
-  },
-
-  getToken(): string | null {
-    return localStorage.getItem('token');
+  login: async (credentials: LoginCredentials) => {
+    const response = await axios.post<AuthResponse>('/auth/login', credentials);
+    return response.data;
   }
 }; 

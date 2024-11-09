@@ -1,34 +1,45 @@
 import express from 'express';
 import cors from 'cors';
 import dotenv from 'dotenv';
+import { fileURLToPath } from 'url';
+import path from 'path';
 import connectDB from '../config/db.js';
 import productRoutes from './routes/products.js';
-import orderRoutes from './routes/orders.js';
 import authRoutes from './routes/auth.js';
+import orderRoutes from './routes/orders.js';
 
-dotenv.config({ path: '.env.local' });
+// Ensure environment variables are loaded before any other operations
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
+
+// Verify environment variables are loaded
+console.log('Environment Check:');
+console.log('MONGO_URI:', process.env.MONGO_URI ? 'Set' : 'Not Set');
+console.log('PORT:', process.env.PORT ? 'Set' : 'Not Set');
+console.log('NODE_ENV:', process.env.NODE_ENV);
 
 const app = express();
 
-connectDB().catch(err => {
-  console.error('Database connection failed:', err);
-  process.exit(1);
-});
+const startServer = async () => {
+  try {
+    await connectDB();
 
-app.use(cors());
-app.use(express.json());
+    app.use(cors());
+    app.use(express.json());
 
-app.use('/api/auth', authRoutes);
-app.use('/api/products', productRoutes);
-app.use('/api/orders', orderRoutes);
+    app.use('/api/auth', authRoutes);
+    app.use('/api/products', productRoutes);
+    app.use('/api/orders', orderRoutes);
 
-const PORT = process.env.PORT || 5000;
+    const PORT = process.env.PORT || 5000;
+    app.listen(PORT, () => {
+      console.log(`Server running on port ${PORT}`);
+    });
+  } catch (error) {
+    console.error('Failed to start server:', error);
+    process.exit(1);
+  }
+};
 
-app.listen(PORT, () => {
-  console.log(`Server running on port ${PORT}`);
-});
-
-process.on('unhandledRejection', (err) => {
-  console.error('Unhandled Rejection:', err);
-  process.exit(1);
-}); 
+startServer(); 

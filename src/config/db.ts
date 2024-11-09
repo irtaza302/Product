@@ -1,25 +1,28 @@
 import mongoose from 'mongoose';
-import dotenv from 'dotenv';
-
-dotenv.config({ path: '.env.local' });
 
 const connectDB = async (): Promise<void> => {
   try {
-    const uri = process.env.VITE_MONGO_URI;
+    const uri = process.env.MONGO_URI;
     if (!uri) {
       throw new Error('MONGO_URI is not defined in environment variables');
     }
 
-    const conn = await mongoose.connect(uri);
+    await mongoose.connect(uri, {
+      serverSelectionTimeoutMS: 5000,
+      socketTimeoutMS: 45000,
+    });
     
-    console.log('\nMongoDB Connection Details:');
-    console.log(`Host: ${conn.connection.host}`);
-    console.log(`Database: ${conn.connection.name}`);
-    console.log(`State: ${conn.connection.readyState === 1 ? 'Connected' : 'Disconnected'}`);
-    
+    // Check if connection is established
+    if (mongoose.connection.readyState !== 1) {
+      throw new Error('Failed to connect to MongoDB');
+    }
+
+    // Test the connection without using .db directly
+    await mongoose.connection.db?.admin().ping();
+    console.log('MongoDB Connected Successfully');
   } catch (error) {
-    console.error('\nMongoDB Connection Error:', error);
-    process.exit(1);
+    console.error('MongoDB Connection Error:', error);
+    throw error;
   }
 };
 

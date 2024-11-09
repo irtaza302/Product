@@ -7,11 +7,19 @@ const router = express.Router();
 
 router.get('/', async (_req, res) => {
   try {
-    const products = await Product.find({});
+    const products = await Product.find({}).lean();
+    if (!products) {
+      throw new Error('No products found');
+    }
+    console.log('Products fetched successfully:', products.length);
     res.json(products);
   } catch (err) {
+    console.error('Error fetching products:', err);
     const error = err as ErrorResponse;
-    res.status(500).json({ message: error.message || 'Error fetching products' });
+    res.status(500).json({ 
+      message: error.message || 'Error fetching products',
+      error: process.env.NODE_ENV === 'development' ? error : undefined
+    });
   }
 });
 
