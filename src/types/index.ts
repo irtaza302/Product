@@ -1,10 +1,18 @@
+import { ORDER_STATUS } from '../constants/index.js';
 import type { UserDocument } from '../models/User.js';
 
 // Public user type (without sensitive data)
 export type User = Pick<UserDocument, 'id' | 'name' | 'email'>;
 
-export interface Product {
-  id: string;
+export type OrderStatus = typeof ORDER_STATUS[keyof typeof ORDER_STATUS];
+
+export interface BaseEntity {
+  _id: string;
+  createdAt: Date;
+  updatedAt: Date;
+}
+
+export interface Product extends BaseEntity {
   name: string;
   description: string;
   price: number;

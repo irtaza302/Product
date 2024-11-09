@@ -1,9 +1,12 @@
 import axios from '../config/axios';
-import { LoginCredentials, AuthResponse } from '../types';
+import type { AuthResponse } from '../types';
 
 export const authService = {
-  login: async (credentials: LoginCredentials) => {
-    const response = await axios.post<AuthResponse>('/auth/login', credentials);
+  login: async (email: string, password: string) => {
+    const response = await axios.post<AuthResponse>('/auth/login', {
+      email,
+      password
+    });
     return response.data;
   }
 }; 

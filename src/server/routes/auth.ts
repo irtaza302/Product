@@ -8,9 +8,22 @@ const router = express.Router();
 router.post('/login', async (req, res) => {
   try {
     const { email, password } = req.body;
-    const user = await UserModel.findOne({ email });
+    console.log('Login attempt:', { email, body: req.body });
     
-    if (!user || !(await user.comparePassword(password))) {
+    if (!email || !password) {
+      throw new Error('Email and password are required');
+    }
+
+    const user = await UserModel.findOne({ email });
+    if (!user) {
+      console.log('User not found:', email);
+      throw new Error('Invalid credentials');
+    }
+
+    const isValidPassword = await user.comparePassword(password);
+    console.log('Password validation:', { email, isValid: isValidPassword });
+
+    if (!isValidPassword) {
       throw new Error('Invalid credentials');
     }
 
@@ -31,6 +44,7 @@ router.post('/login', async (req, res) => {
       token
     });
   } catch (err) {
+    console.error('Login error:', err);
     const error = err as ErrorResponse;
     res.status(401).json({ message: error.message || 'Login failed' });
   }

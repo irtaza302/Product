@@ -1,17 +1,12 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../store';
 import { clearCart } from '../store/slices/cartSlice';
-import { api } from '../services/api';
-
-interface ShippingDetails {
-  fullName: string;
-  address: string;
-  city: string;
-  postalCode: string;
-  country: string;
-}
+import { orderService } from '../services/api/orders';
+import { LoadingSpinner } from '../components/common/LoadingSpinner';
+import { validateShippingDetails } from '../utils/validation';
+import type { ShippingDetails, CartItem } from '../types';
 
 const CheckoutPage: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart);
@@ -26,13 +21,6 @@ const CheckoutPage: React.FC = () => {
     postalCode: '',
     country: '',
   });
-  const auth = useSelector((state: RootState) => state.auth);
-
-  useEffect(() => {
-    if (!auth.isAuthenticated) {
-      navigate('/login');
-    }
-  }, [auth.isAuthenticated, navigate]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -42,27 +30,58 @@ const CheckoutPage: React.FC = () => {
     }));
   };
 
+  const checkStock = async (items: CartItem[]) => {
+    for (const item of items) {
+      const response = await orderService.checkStock(item._id);
+      if (response.stock < item.quantity) {
+        throw new Error(`Insufficient stock for ${item.name}. Available: ${response.stock}`);
+      }
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsProcessing(true);
     setError('');
 
+    // Validate shipping details
+    const validationErrors = validateShippingDetails(shippingDetails);
+    if (validationErrors.length > 0) {
+      setError(validationErrors.join(', '));
+      setIsProcessing(false);
+      return;
+    }
+
     try {
+      await checkStock(cart.items);
+
       const orderItems = cart.items.map(item => ({
-        product: item.id,
+        product: item._id,
         quantity: item.quantity,
         price: item.price
       }));
 
-      const response = await api.orders.create({
+      const response = await orderService.create({
         items: orderItems,
         shippingDetails,
         total: cart.total
       });
 
-      if (response.data.success) {
+      if (response.success) {
+        const orderDetails = {
+          orderId: response.order.id,
+          date: new Date(),
+          items: cart.items.map(item => ({
+            name: item.name,
+            quantity: item.quantity,
+            price: item.price
+          })),
+          shippingDetails,
+          total: cart.total
+        };
+
         dispatch(clearCart());
-        navigate('/order-success');
+        navigate('/order-success', { state: { orderDetails } });
       }
     } catch (err) {
       const error = err as Error;
@@ -71,6 +90,15 @@ const CheckoutPage: React.FC = () => {
       setIsProcessing(false);
     }
   };
+
+  // Render loading state
+  if (isProcessing) {
+    return (
+      <div className="flex justify-center items-center h-[50vh]">
+        <LoadingSpinner size="lg" />
+      </div>
+    );
+  }
 
   if (cart.items.length === 0) {
     return (
@@ -166,7 +194,7 @@ const CheckoutPage: React.FC = () => {
           <h2 className="text-xl font-semibold mb-4">Order Summary</h2>
           <div className="bg-gray-50 p-4 rounded">
             {cart.items.map((item) => (
-              <div key={item.id} className="flex justify-between py-2 border-b">
+              <div key={item._id} className="flex justify-between py-2 border-b">
                 <div>
                   <h3 className="font-medium">{item.name}</h3>
                   <p className="text-sm text-gray-500">Quantity: {item.quantity}</p>

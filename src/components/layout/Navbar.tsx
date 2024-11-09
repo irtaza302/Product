@@ -1,12 +1,18 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
-import { ShoppingCart, User, Search } from 'lucide-react';
+import { clearUser } from '../../store/slices/authSlice';
+import { ShoppingCart, Search, LogOut } from 'lucide-react';
 
 const Navbar: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart);
   const auth = useSelector((state: RootState) => state.auth);
+  const dispatch = useDispatch();
+
+  const handleLogout = () => {
+    dispatch(clearUser());
+  };
 
   return (
     <nav className="backdrop-blur-md bg-white/75 border-b border-gray-100 sticky top-0 z-50">
@@ -48,10 +54,16 @@ const Navbar: React.FC = () => {
             </Link>
 
             {auth.isAuthenticated ? (
-              <button className="flex items-center space-x-2 text-gray-700 hover:text-primary-600 transition-all hover:scale-105">
-                <User className="w-6 h-6" />
-                <span>Account</span>
-              </button>
+              <div className="flex items-center space-x-4">
+                <span className="text-gray-700">{auth.user?.name}</span>
+                <button
+                  onClick={handleLogout}
+                  className="flex items-center space-x-2 text-gray-700 hover:text-red-600 transition-all"
+                >
+                  <LogOut className="w-5 h-5" />
+                  <span>Logout</span>
+                </button>
+              </div>
             ) : (
               <Link 
                 to="/login" 

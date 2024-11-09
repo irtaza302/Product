@@ -1,14 +1,18 @@
 import React, { useState } from 'react';
 import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
+import { Mail, Lock } from 'lucide-react';
 import { authService } from '../../services/authService';
 import { setUser } from '../../store/slices/authSlice';
-import { ErrorResponse } from '../../types';
+import { Input } from '../common/Input';
+import { Button } from '../common/Button';
+import { validateEmail } from '../../utils/validation';
 
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
+  const [loading, setLoading] = useState(false);
   
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -16,50 +20,74 @@ export const LoginForm: React.FC = () => {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
+
+    // Validate email
+    if (!validateEmail(email)) {
+      setError('Please enter a valid email address');
+      return;
+    }
+
+    setLoading(true);
     try {
-      const user = await authService.login(email, password);
+      const response = await authService.login(email, password);
+      localStorage.setItem('token', response.token);
+      
       dispatch(setUser({
-        id: user.id,
-        name: user.name,
-        email: user.email
+        id: response.user.id,
+        name: response.user.name,
+        email: response.user.email
       }));
       navigate('/');
     } catch (err) {
-      const error = err as ErrorResponse;
-      setError(error.message || 'Invalid credentials');
+      console.error('Login error:', err);
+      setError(err instanceof Error ? err.message : 'Invalid credentials');
+    } finally {
+      setLoading(false);
     }
   };
 
   return (
-    <form onSubmit={handleSubmit} className="max-w-md mx-auto mt-8 p-6 bg-white rounded-lg shadow">
-      <h2 className="text-2xl font-bold mb-6">Login</h2>
-      {error && <div className="text-red-500 mb-4">{error}</div>}
-      <div className="mb-4">
-        <label className="block mb-2">Email</label>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
-      <div className="mb-6">
-        <label className="block mb-2">Password</label>
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          className="w-full p-2 border rounded"
-          required
-        />
-      </div>
-      <button
-        type="submit"
-        className="w-full bg-blue-600 text-white py-2 rounded hover:bg-blue-700"
-      >
-        Login
-      </button>
-    </form>
+    <div className="min-h-[70vh] flex items-center justify-center">
+      <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6 bg-white p-8 rounded-xl shadow-lg">
+        <div className="text-center">
+          <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
+          <p className="mt-2 text-gray-600">Please sign in to your account</p>
+        </div>
+
+        {error && (
+          <div className="bg-red-50 text-red-600 p-3 rounded-lg text-sm">
+            {error}
+          </div>
+        )}
+
+        <div className="space-y-4">
+          <Input
+            label="Email"
+            type="email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+            icon={<Mail className="w-5 h-5 text-gray-400" />}
+            required
+          />
+
+          <Input
+            label="Password"
+            type="password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+            icon={<Lock className="w-5 h-5 text-gray-400" />}
+            required
+          />
+        </div>
+
+        <Button
+          type="submit"
+          loading={loading}
+          className="w-full"
+        >
+          Sign In
+        </Button>
+      </form>
+    </div>
   );
 }; 
