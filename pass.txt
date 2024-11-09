@@ -1,0 +1,1 @@
+mongodb+srv://irtaza:zHEB5WMgilodE0i9@custer.bwz4t.mongodb.net/?retryWrites=true&w=majority&appName=Custer
