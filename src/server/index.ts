@@ -24,14 +24,12 @@ app.use(cors({
 
 app.use(express.json());
 
-// Add headers middleware with correct typing
+// Add headers middleware
 app.use((req: Request, res: Response, next: NextFunction) => {
-  // Set CORS headers
   res.setHeader('Access-Control-Allow-Origin', '*');
   res.setHeader('Access-Control-Allow-Methods', 'GET,PUT,POST,DELETE,OPTIONS');
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
   
-  // Handle OPTIONS method
   if (req.method === 'OPTIONS') {
     res.sendStatus(200);
     return;
@@ -39,7 +37,7 @@ app.use((req: Request, res: Response, next: NextFunction) => {
   next();
 });
 
-// Serve static files with correct MIME types
+// Serve static files
 app.use('/assets', express.static(path.join(__dirname, '../../dist/assets'), {
   maxAge: '1y',
   etag: true,
