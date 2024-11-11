@@ -8,6 +8,7 @@ export const productService = {
       const response = await axios.get<Product[]>('/products');
       return response.data;
     } catch (error) {
+      console.error('API Error:', error);
       throw handleApiError(error);
     }
   },

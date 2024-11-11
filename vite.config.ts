@@ -6,7 +6,9 @@ export default defineConfig({
   server: {
     proxy: {
       '/api': {
-        target: 'http://localhost:5000',
+        target: process.env.NODE_ENV === 'production' 
+          ? 'https://product-gold-mu.vercel.app'
+          : 'http://localhost:5000',
         changeOrigin: true,
         secure: false,
       }
@@ -22,5 +24,12 @@ export default defineConfig({
       }
     },
     sourcemap: true
+  },
+  define: {
+    'process.env.VITE_API_URL': JSON.stringify(
+      process.env.NODE_ENV === 'production'
+        ? 'https://product-gold-mu.vercel.app/api'
+        : 'http://localhost:5000/api'
+    )
   }
 });

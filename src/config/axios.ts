@@ -2,8 +2,17 @@ import axios from 'axios';
 import { store } from '../store';
 import { clearUser } from '../store/slices/authSlice';
 
+// Determine the base URL based on environment
+const getBaseUrl = () => {
+  if (process.env.NODE_ENV === 'production') {
+    // Use the Vercel URL in production
+    return 'https://product-gold-mu.vercel.app/api';
+  }
+  return 'http://localhost:5000/api';
+};
+
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: getBaseUrl(),
   headers: {
     'Content-Type': 'application/json',
   },

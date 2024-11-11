@@ -20,7 +20,7 @@ const ProductsPage: React.FC = () => {
         setProducts(response.data);
       } catch (error) {
         console.error('Error fetching products:', error);
-        setError('Failed to fetch products');
+        setError(error instanceof Error ? error.message : 'Failed to fetch products');
       } finally {
         setLoading(false);
       }
