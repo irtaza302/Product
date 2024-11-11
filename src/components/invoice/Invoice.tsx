@@ -1,6 +1,7 @@
 import React from 'react';
 import { format } from 'date-fns';
 import { ShoppingBagIcon } from '@heroicons/react/24/outline';
+import { ORDER_CONSTANTS } from '../../constants/orderConstants';
 
 interface InvoiceProps {
   orderDetails: {
@@ -35,7 +36,9 @@ export const Invoice: React.FC<InvoiceProps> = ({ orderDetails }) => {
           <p className="text-gray-500 mt-1">www.ecomstore.com</p>
         </div>
         <div className="text-right">
-          <h1 className="text-2xl font-bold text-gray-900">INVOICE</h1>
+          <h1 className="text-2xl font-bold text-gray-900">
+            {ORDER_CONSTANTS.INVOICE.TITLE}
+          </h1>
           <p className="text-gray-500">#{orderDetails.orderId}</p>
           <p className="text-gray-500">
             {format(new Date(orderDetails.date), 'MMMM dd, yyyy')}
@@ -46,7 +49,9 @@ export const Invoice: React.FC<InvoiceProps> = ({ orderDetails }) => {
       {/* Billing Details */}
       <div className="grid grid-cols-2 gap-8 mb-8">
         <div>
-          <h3 className="font-semibold text-gray-900 mb-2">Bill To:</h3>
+          <h3 className="font-semibold text-gray-900 mb-2">
+            {ORDER_CONSTANTS.INVOICE.BILL_TO}
+          </h3>
           <div className="text-gray-600">
             <p>{orderDetails.shippingDetails.fullName}</p>
             <p>{orderDetails.shippingDetails.address}</p>
@@ -104,8 +109,8 @@ export const Invoice: React.FC<InvoiceProps> = ({ orderDetails }) => {
 
       {/* Footer */}
       <div className="border-t border-gray-200 mt-8 pt-8 text-center text-gray-500">
-        <p>Thank you for your business!</p>
-        <p className="mt-1">For any questions, please contact support@ecomstore.com</p>
+        <p>{ORDER_CONSTANTS.INVOICE.THANK_YOU}</p>
+        <p className="mt-1">{ORDER_CONSTANTS.INVOICE.SUPPORT_CONTACT}</p>
       </div>
     </div>
   );

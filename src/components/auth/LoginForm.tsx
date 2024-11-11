@@ -7,7 +7,7 @@ import { setUser } from '../../store/slices/authSlice';
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { validateEmail } from '../../utils/validation';
-
+import { AUTH_CONSTANTS } from '../../constants/authConstants';
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -50,8 +50,8 @@ export const LoginForm: React.FC = () => {
     <div className="min-h-[70vh] flex items-center justify-center">
       <form onSubmit={handleSubmit} className="w-full max-w-md space-y-6 bg-white p-8 rounded-xl shadow-lg">
         <div className="text-center">
-          <h2 className="text-3xl font-bold text-gray-900">Welcome back</h2>
-          <p className="mt-2 text-gray-600">Please sign in to your account</p>
+          <h2 className="text-3xl font-bold text-gray-900">{AUTH_CONSTANTS.WELCOME_BACK}</h2>
+          <p className="mt-2 text-gray-600">{AUTH_CONSTANTS.SIGN_IN_PROMPT}</p>
         </div>
 
         {error && (
@@ -85,7 +85,7 @@ export const LoginForm: React.FC = () => {
           loading={loading}
           className="w-full"
         >
-          Sign In
+          {AUTH_CONSTANTS.SIGN_IN_BUTTON}
         </Button>
       </form>
     </div>

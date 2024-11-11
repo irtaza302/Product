@@ -1,6 +1,7 @@
 import React from 'react';
 import { Product } from '../../types';
 import { ShoppingCart, Heart } from 'lucide-react';
+import { PRODUCT_CONSTANTS } from '../../constants/productConstants';
 
 interface ProductCardProps {
   product: Product;
@@ -61,8 +62,8 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             product.stock > 0 ? 'text-green-600' : 'text-red-600'
           }`}>
             {product.stock > 0 
-              ? `In Stock (${product.stock} available)` 
-              : 'Out of Stock'}
+              ? PRODUCT_CONSTANTS.STOCK_STATUS.IN_STOCK(product.stock)
+              : PRODUCT_CONSTANTS.STOCK_STATUS.OUT_OF_STOCK}
           </span>
         </div>
 
@@ -72,7 +73,11 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           className="w-full mt-2 flex items-center justify-center space-x-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-2 rounded-lg hover:shadow-md hover:scale-[1.02] transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
         >
           <ShoppingCart className="w-4 h-4 group-hover:scale-110 transition-transform" />
-          <span>{product.stock > 0 ? 'Add to Cart' : 'Out of Stock'}</span>
+          <span>
+            {product.stock > 0 
+              ? PRODUCT_CONSTANTS.BUTTONS.ADD_TO_CART 
+              : PRODUCT_CONSTANTS.STOCK_STATUS.OUT_OF_STOCK}
+          </span>
         </button>
       </div>
     </div>
