@@ -9,8 +9,7 @@
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
-    "preview": "vite preview",
-    "seed": "cross-env NODE_ENV=development MONGO_URI=\"mongodb+srv://irtaza:zHEB5WMgilodE0i9@custer.bwz4t.mongodb.net/?retryWrites=true&w=majority&appName=Custer\" TS_NODE_PROJECT=tsconfig.seed.json node --loader ts-node/esm src/config/seedData.ts"
+    "preview": "vite preview"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",

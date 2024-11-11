@@ -23,7 +23,12 @@ const startServer = async () => {
   try {
     await connectDB();
 
-    app.use(cors());
+    app.use(cors({
+      origin: process.env.NODE_ENV === 'production' 
+        ? 'https://your-netlify-domain.netlify.app'
+        : 'http://localhost:5173',
+      credentials: true
+    }));
     app.use(express.json());
 
     app.use('/api/auth', authRoutes);

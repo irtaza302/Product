@@ -2,8 +2,12 @@ import axios from 'axios';
 import { store } from '../store';
 import { clearUser } from '../store/slices/authSlice';
 
+const baseURL = process.env.NODE_ENV === 'production' 
+  ? 'https://your-backend-url.com/api'
+  : 'http://localhost:5000/api';
+
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL,
   headers: {
     'Content-Type': 'application/json',
   },
