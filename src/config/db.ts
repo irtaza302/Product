@@ -1,10 +1,11 @@
 import mongoose from 'mongoose';
+import { MESSAGES } from '../constants/messages';
 
 const connectDB = async (): Promise<void> => {
   try {
     const uri = process.env.MONGO_URI;
     if (!uri) {
-      throw new Error('MONGO_URI is not defined in environment variables');
+      throw new Error(MESSAGES.ERRORS.MONGO_URI_NOT_DEFINED);
     }
 
     await mongoose.connect(uri, {

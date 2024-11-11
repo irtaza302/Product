@@ -8,12 +8,10 @@ import productRoutes from './routes/products.js';
 import authRoutes from './routes/auth.js';
 import orderRoutes from './routes/orders.js';
 
-// Ensure environment variables are loaded before any other operations
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-// Verify environment variables are loaded
 console.log('Environment Check:');
 console.log('MONGO_URI:', process.env.MONGO_URI ? 'Set' : 'Not Set');
 console.log('PORT:', process.env.PORT ? 'Set' : 'Not Set');
