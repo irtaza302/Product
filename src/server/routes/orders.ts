@@ -27,12 +27,10 @@ router.post('/', auth, async (req: AuthRequest, res) => {
         throw new Error(`Insufficient stock for ${product.name}`);
       }
 
-      // Update stock
       product.stock -= item.quantity;
       await product.save({ session });
     }
     
-    // Create order
     const order = new Order({
       user: req.user.id,
       items,
@@ -42,12 +40,7 @@ router.post('/', auth, async (req: AuthRequest, res) => {
     await order.save({ session });
 
     await session.commitTransaction();
-    
-    res.status(201).json({ 
-      success: true, 
-      order,
-      message: 'Order placed successfully and stock updated' 
-    });
+    res.status(201).json({ success: true, order });
 
   } catch (err) {
     await session.abortTransaction();

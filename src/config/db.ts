@@ -12,23 +12,16 @@ const connectDB = async (): Promise<void> => {
       socketTimeoutMS: 45000,
       retryWrites: true,
       w: 'majority',
-      // Add these options for Vercel deployment
       bufferCommands: false,
       maxPoolSize: 10,
-    };
+    } as ConnectOptions;
 
     // Close existing connections before creating new one
     if (mongoose.connections[0].readyState) {
       await mongoose.disconnect();
     }
 
-    await mongoose.connect(uri, options as ConnectOptions);
-    
-    // Add connection error handler
-    mongoose.connection.on('error', (error) => {
-      console.error('MongoDB connection error:', error);
-    });
-
+    await mongoose.connect(uri, options);
     console.log('MongoDB Connected Successfully');
   } catch (error) {
     console.error('MongoDB Connection Error:', error);
