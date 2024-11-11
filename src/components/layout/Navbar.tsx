@@ -1,36 +1,23 @@
-import React, { useState } from 'react';
+import React from 'react';
 import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { clearUser } from '../../store/slices/authSlice';
-import { ShoppingCart, Search, LogOut } from 'lucide-react';
+import { ShoppingCart, LogOut } from 'lucide-react';
 import type { CartItem } from '../../types';
 import { UI_CONSTANTS } from '../../constants/uiConstants';
-import { useSearchProductsQuery } from '../../store/api/apiSlice';
-import { useDebounce } from '../../hooks/useDebounce';
 
 const getTotalItemsCount = (items: CartItem[]): number => {
   return items.reduce((total, item) => total + item.quantity, 0);
 };
 
 const Navbar: React.FC = () => {
-  const [searchTerm, setSearchTerm] = useState('');
-  const debouncedSearch = useDebounce(searchTerm, 500);
-  
-  const { data: searchResults, isLoading } = useSearchProductsQuery(debouncedSearch, {
-    skip: !debouncedSearch,
-  });
-
   const cart = useSelector((state: RootState) => state.cart);
   const auth = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
 
   const handleLogout = () => {
     dispatch(clearUser());
-  };
-
-  const handleSearch = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setSearchTerm(e.target.value);
   };
 
   return (
@@ -42,45 +29,7 @@ const Navbar: React.FC = () => {
               {UI_CONSTANTS.ECOMMERCE_STORE_NAME}
             </span>
           </Link>
-          <div className="hidden md:flex flex-1 max-w-md mx-8">
-            <div className="relative w-full">
-              <input 
-                type="text"
-                value={searchTerm}
-                onChange={handleSearch}
-                placeholder={UI_CONSTANTS.SEARCH_PLACEHOLDER}
-                className="w-full pl-12 pr-4 py-2.5 rounded-full bg-gray-50 border border-gray-200 focus:ring-2 focus:ring-primary-500 focus:border-transparent"
-              />
-              <Search className={`w-5 h-5 absolute left-4 top-1/2 -translate-y-1/2 ${
-                isLoading ? 'animate-spin text-primary-600' : 'text-gray-400'
-              }`} />
-              
-              {/* Search Results Dropdown */}
-              {searchResults && searchResults.length > 0 && (
-                <div className="absolute top-full left-0 right-0 mt-2 bg-white rounded-lg shadow-lg border border-gray-100 max-h-96 overflow-y-auto">
-                  {searchResults.map((product) => (
-                    <Link
-                      key={product._id}
-                      to={`/product/${product._id}`}
-                      className="flex items-center p-3 hover:bg-gray-50 transition-colors"
-                    >
-                      <img 
-                        src={product.image} 
-                        alt={product.name} 
-                        className="w-12 h-12 object-cover rounded"
-                      />
-                      <div className="ml-3">
-                        <p className="font-medium text-gray-900">{product.name}</p>
-                        <p className="text-sm text-gray-500">${product.price}</p>
-                      </div>
-                    </Link>
-                  ))}
-                </div>
-              )}
-            </div>
-          </div>
           
-          {/* Rest of the navbar code remains the same */}
           <div className="flex items-center space-x-8">
             <Link 
               to="/" 

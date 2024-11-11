@@ -1,5 +1,4 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
-import type { Product } from '../../types';
 
 export const apiSlice = createApi({
   reducerPath: 'api',
@@ -13,11 +12,5 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-  endpoints: (builder) => ({
-    searchProducts: builder.query<Product[], string>({
-      query: (searchTerm) => `/products?search=${searchTerm}`,
-    }),
-  }),
-});
-
-export const { useSearchProductsQuery } = apiSlice; 
+  endpoints: () => ({})
+}); 
