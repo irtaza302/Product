@@ -4,6 +4,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { clearUser } from '../../store/slices/authSlice';
 import { ShoppingCart, Search, LogOut } from 'lucide-react';
+import type { CartItem } from '../../types';
+// Add this helper function at the top of the file
+const getTotalItemsCount = (items: CartItem[]): number => {
+  return items.reduce((total, item) => total + item.quantity, 0);
+};
 
 const Navbar: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart);
@@ -46,9 +51,9 @@ const Navbar: React.FC = () => {
             
             <Link to="/cart" className="relative group">
               <ShoppingCart className="w-6 h-6 text-gray-700 group-hover:text-primary-600 transition-all group-hover:scale-110" />
-              {cart.items.length > 0 && (
+              {getTotalItemsCount(cart.items) > 0 && (
                 <span className="absolute -top-2 -right-2 bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
-                  {cart.items.length}
+                  {getTotalItemsCount(cart.items)}
                 </span>
               )}
             </Link>
