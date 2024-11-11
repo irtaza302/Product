@@ -10,7 +10,9 @@
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "seed": "cross-env NODE_ENV=development MONGO_URI=\"mongodb+srv://irtaza:zHEB5WMgilodE0i9@custer.bwz4t.mongodb.net/?retryWrites=true&w=majority&appName=Custer\" TS_NODE_PROJECT=tsconfig.seed.json node --loader ts-node/esm src/config/seedData.ts"
+    "seed": "cross-env NODE_ENV=development MONGO_URI=\"mongodb+srv://irtaza:zHEB5WMgilodE0i9@custer.bwz4t.mongodb.net/?retryWrites=true&w=majority&appName=Custer\" TS_NODE_PROJECT=tsconfig.seed.json node --loader ts-node/esm src/config/seedData.ts",
+    "vercel-build": "npm run build",
+    "start": "node dist/server/index.js"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",

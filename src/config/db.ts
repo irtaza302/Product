@@ -1,25 +1,35 @@
-import mongoose from 'mongoose';
+import mongoose, { ConnectOptions } from 'mongoose';
 import { MESSAGES } from '../constants/messages';
 
 const connectDB = async (): Promise<void> => {
   try {
-    const uri = process.env.MONGO_URI;
+    const uri = process.env.MONGODB_URI || process.env.MONGO_URI;
     if (!uri) {
       throw new Error(MESSAGES.ERRORS.MONGO_URI_NOT_DEFINED);
     }
 
-    await mongoose.connect(uri, {
+    const options = {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
-    });
-    
-    // Check if connection is established
-    if (mongoose.connection.readyState !== 1) {
-      throw new Error('Failed to connect to MongoDB');
+      retryWrites: true,
+      w: 'majority',
+      // Add these options for Vercel deployment
+      bufferCommands: false,
+      maxPoolSize: 10,
+    };
+
+    // Close existing connections before creating new one
+    if (mongoose.connections[0].readyState) {
+      await mongoose.disconnect();
     }
 
-    // Test the connection without using .db directly
-    await mongoose.connection.db?.admin().ping();
+    await mongoose.connect(uri, options as ConnectOptions);
+    
+    // Add connection error handler
+    mongoose.connection.on('error', (error) => {
+      console.error('MongoDB connection error:', error);
+    });
+
     console.log('MongoDB Connected Successfully');
   } catch (error) {
     console.error('MongoDB Connection Error:', error);
