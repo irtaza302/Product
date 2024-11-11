@@ -3,7 +3,7 @@ import { store } from '../store';
 import { clearUser } from '../store/slices/authSlice';
 
 const baseURL = process.env.NODE_ENV === 'production' 
-  ? 'https://your-backend-url.com/api'
+  ? 'https://your-backend-url.com/api'  // Replace with your backend URL once deployed
   : 'http://localhost:5000/api';
 
 const instance = axios.create({
