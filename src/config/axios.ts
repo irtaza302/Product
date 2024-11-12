@@ -8,7 +8,7 @@ const instance = axios.create({
     'Content-Type': 'application/json',
   },
 });
-
+// Add request interceptor to include token in headers
 instance.interceptors.request.use(
   (config) => {
     const token = localStorage.getItem('token');
