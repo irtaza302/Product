@@ -1,5 +1,5 @@
 import React from 'react';
-import { ProductCard } from '../components/product/ProductCard';
+import { MemoizedProductCard } from '../components/product/ProductCard';
 import { Product } from '../types';
 import { api } from '../services/api';
 import { Loader2 } from 'lucide-react';
@@ -54,7 +54,7 @@ const ProductsPage: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <ProductCard
+          <MemoizedProductCard
             key={product._id}
             product={product}
           />

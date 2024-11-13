@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, memo } from 'react';
 import { Product } from '../../types';
 import { ShoppingCart, Heart } from 'lucide-react';
 import { PRODUCT_CONSTANTS } from '../../constants/productConstants';
@@ -10,12 +10,20 @@ interface ProductCardProps {
   loading?: boolean;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ 
-  product,
-  loading = false 
-}) => {
+// Custom comparison function for memo
+const areEqual = (prevProps: ProductCardProps, nextProps: ProductCardProps): boolean => {
+  return (
+    prevProps.loading === nextProps.loading &&
+    prevProps.product._id === nextProps.product._id &&
+    prevProps.product.price === nextProps.product.price &&
+    prevProps.product.stock === nextProps.product.stock
+  );
+};
+
+const ProductCard: React.FC<ProductCardProps> = ({ product, loading = false }) => {
   const dispatch = useAppDispatch();
 
+  // Memoize the callback to prevent recreation on every render
   const handleAddToCart = useCallback(async () => {
     dispatch(addToCart(product));
     await dispatch(syncCart()).unwrap();
@@ -47,6 +55,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           src={product.image} 
           alt={product.name}
           className="absolute inset-0 h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          loading="lazy" // Add lazy loading for images
         />
       </div>
       
@@ -90,3 +99,6 @@ export const ProductCard: React.FC<ProductCardProps> = ({
     </div>
   );
 };
+
+// Export memoized component with custom comparison
+export const MemoizedProductCard = memo(ProductCard, areEqual);
