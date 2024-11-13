@@ -2,23 +2,28 @@ import express from 'express';
 import { Order } from '../../models/Order.js';
 import Product, { ProductDocument } from '../../models/Product.js';
 import type { ErrorResponse } from '../../types/index.js';
-import { AuthRequest, auth } from '../middleware/auth.js';
+import { AuthRequest, optionalAuth } from '../middleware/auth.js';
 
 const router = express.Router();
 
-router.post('/', auth, async (req: AuthRequest, res) => {
+router.post('/', optionalAuth, async (req: AuthRequest, res) => {
   const session = await Order.startSession();
   session.startTransaction();
 
   try {
     const { items, shippingDetails, total } = req.body;
-    if (!req.user) {
-      throw new Error('Authentication required');
-    }
+    
+    // Create order with optional user ID
+    const orderData = {
+      ...(req.user && { user: req.user.id }), // Only include user if authenticated
+      items,
+      shippingDetails,
+      total,
+    };
 
     // Verify stock and update products
     for (const item of items) {
-      const product = await Product.findById(item.product).session(session) as ProductDocument | null;
+      const product = await Product.findById(item.product).session(session);
       if (!product) {
         throw new Error(`Product ${item.product} not found`);
       }
@@ -27,18 +32,11 @@ router.post('/', auth, async (req: AuthRequest, res) => {
         throw new Error(`Insufficient stock for ${product.name}`);
       }
 
-      // Update stock
       product.stock -= item.quantity;
       await product.save({ session });
     }
     
-    // Create order
-    const order = new Order({
-      user: req.user.id,
-      items,
-      shippingDetails,
-      total,
-    });
+    const order = new Order(orderData);
     await order.save({ session });
 
     await session.commitTransaction();

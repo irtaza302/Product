@@ -27,7 +27,7 @@ export const router = createBrowserRouter([
       {
         path: 'checkout',
         element: (
-          <PrivateRoute>
+          <PrivateRoute requireAuth={false}>
             <CheckoutPage />
           </PrivateRoute>
         ),

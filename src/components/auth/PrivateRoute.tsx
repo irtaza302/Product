@@ -6,9 +6,10 @@ import { LoadingSpinner } from '../common/LoadingSpinner';
 
 interface PrivateRouteProps {
   children: React.ReactNode;
+  requireAuth?: boolean;
 }
 
-const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, requireAuth = true }) => {
   const { isAuthenticated, loading } = useSelector((state: RootState) => state.auth);
   const location = useLocation();
 
@@ -20,11 +21,11 @@ const PrivateRoute: React.FC<PrivateRouteProps> = ({ children }) => {
     );
   }
 
-  return isAuthenticated ? (
-    <>{children}</>
-  ) : (
-    <Navigate to="/login" state={{ from: location }} replace />
-  );
+  if (requireAuth && !isAuthenticated) {
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  return <>{children}</>;
 };
 
 export default PrivateRoute; 

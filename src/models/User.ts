@@ -1,11 +1,16 @@
 import mongoose, { Document, Schema } from 'mongoose';
 import bcrypt from 'bcryptjs';
+import { CartItem } from '../types';
 
 // Base interface for User properties
 export interface IUser {
   name: string;
   email: string;
   password: string;
+  cart: {
+    items: CartItem[];
+    total: number;
+  };
 }
 
 // Interface for User Document with methods
@@ -16,7 +21,20 @@ export interface UserDocument extends IUser, Document {
 const userSchema = new Schema<UserDocument>({
   name: { type: String, required: true },
   email: { type: String, required: true, unique: true },
-  password: { type: String, required: true }
+  password: { type: String, required: true },
+  cart: {
+    items: [{
+      _id: String,
+      name: String,
+      description: String,
+      price: Number,
+      image: String,
+      category: String,
+      stock: Number,
+      quantity: Number
+    }],
+    total: { type: Number, default: 0 }
+  }
 }, {
   timestamps: true,
   toJSON: {

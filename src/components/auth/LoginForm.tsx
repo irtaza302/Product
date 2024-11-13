@@ -1,27 +1,27 @@
 import React, { useState } from 'react';
-import { useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
 import { authService } from '../../services/authService';
-import { setUser } from '../../store/slices/authSlice';
+import { loginUser } from '../../store/slices/authSlice';
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { validateEmail } from '../../utils/validation';
 import { AUTH_CONSTANTS } from '../../constants/authConstants';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(false);
   
-  const dispatch = useDispatch();
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setError('');
 
-    // Validate email
     if (!validateEmail(email)) {
       setError('Please enter a valid email address');
       return;
@@ -30,13 +30,16 @@ export const LoginForm: React.FC = () => {
     setLoading(true);
     try {
       const response = await authService.login(email, password);
-      localStorage.setItem('token', response.token);
       
-      dispatch(setUser({
-        id: response.user.id,
-        name: response.user.name,
-        email: response.user.email
-      }));
+      await dispatch(loginUser({
+        userData: {
+          id: response.user.id,
+          name: response.user.name,
+          email: response.user.email
+        },
+        token: response.token
+      })).unwrap();
+
       navigate('/');
     } catch (err) {
       console.error('Login error:', err);

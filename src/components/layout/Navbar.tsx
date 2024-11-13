@@ -3,6 +3,7 @@ import { Link } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { clearUser } from '../../store/slices/authSlice';
+import { clearCart } from '../../store/slices/cartSlice';
 import { ShoppingCart, LogOut } from 'lucide-react';
 import type { CartItem } from '../../types';
 import { UI_CONSTANTS } from '../../constants/uiConstants';
@@ -18,6 +19,7 @@ const Navbar: React.FC = () => {
 
   const handleLogout = () => {
     dispatch(clearUser());
+    dispatch(clearCart());
   };
 
   return (
