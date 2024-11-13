@@ -5,12 +5,12 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "dev:server": "tsx watch src/server/index.ts",
+    "dev:server": "nodemon --watch src/server --watch src/models --watch src/types --ext ts,js --exec tsx src/server/index.ts",
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\"",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
-    "seed": "cross-env NODE_ENV=development MONGO_URI=\"mongodb+srv://irtaza:zHEB5WMgilodE0i9@custer.bwz4t.mongodb.net/?retryWrites=true&w=majority&appName=Custer\" TS_NODE_PROJECT=tsconfig.seed.json node --loader ts-node/esm src/config/seedData.ts"
+    "seed": "cross-env NODE_ENV=development MONGO_URI=\"your-mongo-uri\" TS_NODE_PROJECT=tsconfig.seed.json node --loader ts-node/esm src/config/seedData.ts"
   },
   "dependencies": {
     "@headlessui/react": "^2.2.0",
