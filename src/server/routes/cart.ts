@@ -5,6 +5,84 @@ import type { ErrorResponse } from '../../types/index.js';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     CartItem:
+ *       type: object
+ *       properties:
+ *         _id:
+ *           type: string
+ *         name:
+ *           type: string
+ *         description:
+ *           type: string
+ *         price:
+ *           type: number
+ *         image:
+ *           type: string
+ *         category:
+ *           type: string
+ *         stock:
+ *           type: number
+ *         quantity:
+ *           type: number
+ */
+
+/**
+ * @swagger
+ * /api/cart:
+ *   get:
+ *     summary: Get user's cart
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     responses:
+ *       200:
+ *         description: User's cart
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 items:
+ *                   type: array
+ *                   items:
+ *                     $ref: '#/components/schemas/CartItem'
+ *                 total:
+ *                   type: number
+ *       401:
+ *         description: Unauthorized
+ *   
+ *   post:
+ *     summary: Update user's cart
+ *     tags: [Cart]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             required:
+ *               - items
+ *               - total
+ *             properties:
+ *               items:
+ *                 type: array
+ *                 items:
+ *                   $ref: '#/components/schemas/CartItem'
+ *               total:
+ *                 type: number
+ *     responses:
+ *       200:
+ *         description: Cart updated successfully
+ *       400:
+ *         description: Invalid input
+ */
+
 // Get user's cart - requires authentication
 router.get('/', auth, async (req: AuthRequest, res) => {
   try {

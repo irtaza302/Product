@@ -8,6 +8,8 @@ import productRoutes from './routes/products.js';
 import authRoutes from './routes/auth.js';
 import orderRoutes from './routes/orders.js';
 import cartRoutes from './routes/cart.js';
+import swaggerUi from 'swagger-ui-express';
+import { specs } from './config/swagger.js';
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -31,6 +33,8 @@ const startServer = async () => {
     app.use('/api/products', productRoutes);
     app.use('/api/orders', orderRoutes);
     app.use('/api/cart', cartRoutes);
+
+    app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
     const PORT = process.env.PORT || 5000;
     app.listen(PORT, () => {
