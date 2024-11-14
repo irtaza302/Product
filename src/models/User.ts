@@ -11,6 +11,8 @@ export interface IUser {
     items: CartItem[];
     total: number;
   };
+  createdAt?: Date;
+  updatedAt?: Date;
 }
 
 // Interface for User Document with methods

@@ -8,6 +8,7 @@ import { addToCart, syncCart } from '../../store/slices/cartSlice';
 interface ProductCardProps {
   product: Product;
   loading?: boolean;
+  onAddToCart?: (product: Product) => Promise<void>;
 }
 
 // Custom comparison function for memo

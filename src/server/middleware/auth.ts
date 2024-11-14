@@ -9,9 +9,10 @@ interface JwtPayload {
 
 export interface AuthRequest extends Request {
   user?: UserDocument;
+  token?: string;
 }
 
-export const auth = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const auth = async (req: AuthRequest, res: Response, next: NextFunction): Promise<void> => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     if (!token) {
@@ -37,7 +38,7 @@ export const auth = async (req: AuthRequest, res: Response, next: NextFunction) 
   }
 };
 
-export const optionalAuth = async (req: AuthRequest, res: Response, next: NextFunction) => {
+export const optionalAuth = async (req: AuthRequest, _res: Response, next: NextFunction) => {
   try {
     const token = req.header('Authorization')?.replace('Bearer ', '');
     
