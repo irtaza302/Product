@@ -1,6 +1,6 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-export const apiSlice = createApi({
+export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ 
     baseUrl: '/api',
@@ -12,5 +12,6 @@ export const apiSlice = createApi({
       return headers;
     },
   }),
-  endpoints: () => ({})
+  tagTypes: ['Products', 'Cart', 'Orders'],
+  endpoints: () => ({}),
 }); 

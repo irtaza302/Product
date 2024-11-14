@@ -3,32 +3,46 @@ import { Product } from '../../types';
 import { ShoppingCart, Heart } from 'lucide-react';
 import { PRODUCT_CONSTANTS } from '../../constants/productConstants';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { addToCart, syncCart } from '../../store/slices/cartSlice';
+import { addToCart } from '../../store/slices/cartSlice';
+import { useUpdateCartMutation } from '../../store/api/cartApi';
+import { useSelector } from 'react-redux';
+import { RootState } from '../../store';
+import { calculateCartTotal } from '../../utils/cartUtils';
 
 interface ProductCardProps {
   product: Product;
   loading?: boolean;
-  onAddToCart?: (product: Product) => Promise<void>;
 }
-
-// Custom comparison function for memo
-const areEqual = (prevProps: ProductCardProps, nextProps: ProductCardProps): boolean => {
-  return (
-    prevProps.loading === nextProps.loading &&
-    prevProps.product._id === nextProps.product._id &&
-    prevProps.product.price === nextProps.product.price &&
-    prevProps.product.stock === nextProps.product.stock
-  );
-};
 
 const ProductCard: React.FC<ProductCardProps> = ({ product, loading = false }) => {
   const dispatch = useAppDispatch();
+  const cart = useSelector((state: RootState) => state.cart);
+  const auth = useSelector((state: RootState) => state.auth);
+  const [updateCart] = useUpdateCartMutation();
 
-  // Memoize the callback to prevent recreation on every render
   const handleAddToCart = useCallback(async () => {
     dispatch(addToCart(product));
-    await dispatch(syncCart()).unwrap();
-  }, [dispatch, product]);
+    
+    if (auth.isAuthenticated) {
+      try {
+        const existingItem = cart.items.find(item => item._id === product._id);
+        const updatedItems = existingItem
+          ? cart.items.map(item => 
+              item._id === product._id 
+                ? { ...item, quantity: item.quantity + 1 }
+                : item
+            )
+          : [...cart.items, { ...product, quantity: 1 }];
+        
+        await updateCart({
+          items: updatedItems,
+          total: calculateCartTotal(updatedItems)
+        }).unwrap();
+      } catch (error) {
+        console.error('Failed to sync cart:', error);
+      }
+    }
+  }, [dispatch, product, auth.isAuthenticated, cart.items, updateCart]);
 
   if (loading) {
     return (
@@ -101,5 +115,4 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, loading = false }) =
   );
 };
 
-// Export memoized component with custom comparison
-export const MemoizedProductCard = memo(ProductCard, areEqual);
+export const MemoizedProductCard = memo(ProductCard);

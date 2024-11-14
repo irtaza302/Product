@@ -25,11 +25,6 @@ export interface CartItem extends Product {
   quantity: number;
 }
 
-export interface ErrorResponse extends Error {
-  message: string;
-  code?: number;
-}
-
 export interface ShippingDetails {
   fullName: string;
   address: string;
@@ -64,14 +59,9 @@ export interface AuthResponse {
   token: string;
 }
 
-export interface ApiResponse<T> {
-  data: T;
-  message?: string;
-  success: boolean;
-}
-
-export interface ApiError {
-  message: string;
-  code?: string;
+// Add ErrorResponse type
+export interface ErrorResponse extends Error {
   status?: number;
+  code?: string;
+  data?: unknown;
 } 

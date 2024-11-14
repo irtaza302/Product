@@ -3,16 +3,16 @@ import { useSelector, useDispatch } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../store';
 import { clearCart } from '../store/slices/cartSlice';
-import { orderService } from '../services/api/orders';
+import { useCreateOrderMutation } from '../store/api/ordersApi';
 import { LoadingSpinner } from '../components/common/LoadingSpinner';
 import { validateShippingDetails } from '../utils/validation';
-import type { ShippingDetails, CartItem } from '../types';
+import { useStockCheck } from '../hooks/useStockCheck';
+import type { ShippingDetails } from '../types';
 
 const CheckoutPage: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart);
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const [isProcessing, setIsProcessing] = useState(false);
   const [error, setError] = useState('');
   const [shippingDetails, setShippingDetails] = useState<ShippingDetails>({
     fullName: '',
@@ -22,6 +22,9 @@ const CheckoutPage: React.FC = () => {
     country: '',
   });
 
+  const [createOrder, { isLoading: isProcessing }] = useCreateOrderMutation();
+  const checkStockForItems = useStockCheck();
+
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setShippingDetails((prev) => ({
@@ -30,64 +33,47 @@ const CheckoutPage: React.FC = () => {
     }));
   };
 
-  const checkStock = async (items: CartItem[]) => {
-    for (const item of items) {
-      const response = await orderService.checkStock(item._id);
-      if (response.stock < item.quantity) {
-        throw new Error(`Insufficient stock for ${item.name}. Available: ${response.stock}`);
-      }
-    }
-  };
-
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsProcessing(true);
     setError('');
 
     // Validate shipping details
     const validationErrors = validateShippingDetails(shippingDetails);
     if (validationErrors.length > 0) {
       setError(validationErrors.join(', '));
-      setIsProcessing(false);
       return;
     }
 
     try {
-      await checkStock(cart.items);
+      // Check stock for all items
+      await checkStockForItems(cart.items);
 
-      const orderItems = cart.items.map(item => ({
-        product: item._id,
-        quantity: item.quantity,
-        price: item.price
-      }));
-
-      const response = await orderService.create({
-        items: orderItems,
+      const response = await createOrder({
+        items: cart.items.map(item => ({
+          product: item._id,
+          quantity: item.quantity,
+          price: item.price
+        })),
         shippingDetails,
         total: cart.total
-      });
+      }).unwrap();
 
       if (response.success) {
-        const orderDetails = {
-          orderId: response.order.id,
-          date: new Date(),
-          items: cart.items.map(item => ({
-            name: item.name,
-            quantity: item.quantity,
-            price: item.price
-          })),
-          shippingDetails,
-          total: cart.total
-        };
-
         dispatch(clearCart());
-        navigate('/order-success', { state: { orderDetails } });
+        navigate('/order-success', { 
+          state: { 
+            orderDetails: {
+              orderId: response.order.id,
+              date: new Date(),
+              items: cart.items,
+              shippingDetails,
+              total: cart.total
+            }
+          }
+        });
       }
     } catch (err) {
-      const error = err as Error;
-      setError(error.message || 'Failed to process order. Please try again.');
-    } finally {
-      setIsProcessing(false);
+      setError(err instanceof Error ? err.message : 'Failed to process order');
     }
   };
 

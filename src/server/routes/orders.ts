@@ -10,6 +10,48 @@ const router = express.Router();
  * @swagger
  * components:
  *   schemas:
+ *     Order:
+ *       type: object
+ *       required:
+ *         - items
+ *         - shippingDetails
+ *         - total
+ *       properties:
+ *         id:
+ *           type: string
+ *           description: Auto-generated order ID
+ *           example: "507f1f77bcf86cd799439011"
+ *         user:
+ *           type: string
+ *           description: User ID (optional for guest checkout)
+ *           example: "507f1f77bcf86cd799439012"
+ *         items:
+ *           type: array
+ *           description: Array of order items
+ *           items:
+ *             $ref: '#/components/schemas/OrderItem'
+ *         shippingDetails:
+ *           $ref: '#/components/schemas/ShippingDetails'
+ *         total:
+ *           type: number
+ *           description: Total order amount
+ *           minimum: 0
+ *           example: 99.99
+ *         status:
+ *           type: string
+ *           description: Current order status
+ *           enum:
+ *             - pending
+ *             - processing
+ *             - shipped
+ *             - delivered
+ *           default: pending
+ *           example: "pending"
+ *         createdAt:
+ *           type: string
+ *           format: date-time
+ *           description: Order creation timestamp
+ *           example: "2024-03-20T15:30:00Z"
  *     OrderItem:
  *       type: object
  *       required:
@@ -19,13 +61,18 @@ const router = express.Router();
  *       properties:
  *         product:
  *           type: string
- *           description: Product ID
+ *           description: Reference to product ID
+ *           example: "507f1f77bcf86cd799439013"
  *         quantity:
  *           type: number
  *           description: Quantity ordered
+ *           minimum: 1
+ *           example: 2
  *         price:
  *           type: number
- *           description: Price per item
+ *           description: Price per item at time of order
+ *           minimum: 0
+ *           example: 29.99
  *     ShippingDetails:
  *       type: object
  *       required:
@@ -37,21 +84,29 @@ const router = express.Router();
  *       properties:
  *         fullName:
  *           type: string
+ *           description: Customer's full name
+ *           example: "John Doe"
  *         address:
  *           type: string
+ *           description: Shipping street address
+ *           example: "123 Main St"
  *         city:
  *           type: string
+ *           description: City name
+ *           example: "New York"
  *         postalCode:
  *           type: string
+ *           description: Postal/ZIP code
+ *           example: "10001"
  *         country:
  *           type: string
- */
-
-/**
- * @swagger
+ *           description: Country name
+ *           example: "United States"
+ *
  * /api/orders:
  *   post:
  *     summary: Create a new order
+ *     description: Creates a new order with the provided items and shipping details
  *     tags: [Orders]
  *     security:
  *       - bearerAuth: []
@@ -77,8 +132,36 @@ const router = express.Router();
  *     responses:
  *       201:
  *         description: Order created successfully
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: object
+ *               properties:
+ *                 success:
+ *                   type: boolean
+ *                   example: true
+ *                 order:
+ *                   $ref: '#/components/schemas/Order'
+ *                 message:
+ *                   type: string
+ *                   example: "Order placed successfully and stock updated"
  *       400:
  *         description: Invalid input or insufficient stock
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/Error'
+ *             examples:
+ *               invalidInput:
+ *                 value:
+ *                   message: "Invalid input data"
+ *                   code: "INVALID_INPUT"
+ *               insufficientStock:
+ *                 value:
+ *                   message: "Insufficient stock for Product X"
+ *                   code: "INSUFFICIENT_STOCK"
+ *       401:
+ *         $ref: '#/components/responses/UnauthorizedError'
  *
  * /api/orders/check-stock/{productId}:
  *   get:

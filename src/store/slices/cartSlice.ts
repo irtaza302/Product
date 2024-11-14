@@ -1,15 +1,11 @@
-import { createSlice, PayloadAction, createAsyncThunk } from '@reduxjs/toolkit';
+import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { CartItem, Product } from '../../types';
 import { calculateCartTotal } from '../../utils/cartUtils';
-import axios from '../../config/axios';
-import type { RootState } from '../index';
 import { clearUser } from './authSlice';
 
 interface CartState {
   items: CartItem[];
   total: number;
-  loading: boolean;
-  error: string | null;
 }
 
 const saveCartToLocalStorage = (items: CartItem[], total: number) => {
@@ -30,33 +26,7 @@ const loadCartFromLocalStorage = () => {
   }
 };
 
-const initialState: CartState = {
-  ...loadCartFromLocalStorage(),
-  loading: false,
-  error: null,
-};
-
-// Create async thunks
-export const syncCart = createAsyncThunk(
-  'cart/syncCart',
-  async (_, { getState }) => {
-    const state = getState() as RootState;
-    if (!state.auth.isAuthenticated) return;
-
-    await axios.post('/cart', {
-      items: state.cart.items,
-      total: state.cart.total,
-    });
-  }
-);
-
-export const fetchCart = createAsyncThunk(
-  'cart/fetchCart',
-  async () => {
-    const response = await axios.get('/cart');
-    return response.data;
-  }
-);
+const initialState: CartState = loadCartFromLocalStorage();
 
 const cartSlice = createSlice({
   name: 'cart',
@@ -92,40 +62,26 @@ const cartSlice = createSlice({
       state.total = 0;
       localStorage.removeItem('cart');
     },
+    updateCartFromServer: (state, action: PayloadAction<{ items: CartItem[]; total: number }>) => {
+      state.items = action.payload.items;
+      state.total = action.payload.total;
+      saveCartToLocalStorage(state.items, state.total);
+    },
   },
   extraReducers: (builder) => {
-    builder
-      .addCase(syncCart.pending, (state) => {
-        state.loading = true;
-        state.error = null;
-      })
-      .addCase(syncCart.fulfilled, (state) => {
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(syncCart.rejected, (state, action) => {
-        state.loading = false;
-        state.error = action.error.message ?? 'Failed to sync cart';
-      })
-      .addCase(fetchCart.fulfilled, (state, action) => {
-        if (action.payload) {
-          state.items = action.payload.items;
-          state.total = action.payload.total;
-        } else {
-          state.items = [];
-          state.total = 0;
-        }
-        state.loading = false;
-        state.error = null;
-      })
-      .addCase(clearUser, (state) => {
-        state.items = [];
-        state.total = 0;
-        state.loading = false;
-        state.error = null;
-      });
+    builder.addCase(clearUser, (state) => {
+      state.items = [];
+      state.total = 0;
+    });
   },
 });
 
-export const { addToCart, removeFromCart, updateQuantity, clearCart } = cartSlice.actions;
+export const { 
+  addToCart, 
+  removeFromCart, 
+  updateQuantity, 
+  clearCart,
+  updateCartFromServer 
+} = cartSlice.actions;
+
 export default cartSlice.reducer;

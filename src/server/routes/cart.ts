@@ -103,15 +103,27 @@ router.post('/', optionalAuth, async (req: AuthRequest, res) => {
     if (req.user) {
       const user = await UserModel.findByIdAndUpdate(
         req.user.id,
-        { cart: { items, total } },
+        { 
+          $set: { 
+            'cart.items': items,
+            'cart.total': total
+          }
+        },
         { new: true }
       ).select('cart');
-      res.json(user?.cart);
+
+      if (!user) {
+        throw new Error('User not found');
+      }
+
+      console.log('Cart updated for user:', user.id, user.cart);
+      res.json(user.cart);
     } else {
       // For non-authenticated users, just return success
       res.json({ items, total });
     }
   } catch (err) {
+    console.error('Cart update error:', err);
     const error = err as ErrorResponse;
     res.status(400).json({ message: error.message });
   }

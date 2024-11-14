@@ -2,12 +2,14 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
 import { authService } from '../../services/authService';
-import { loginUser } from '../../store/slices/authSlice';
+import { setUser } from '../../store/slices/authSlice';
 import { Input } from '../common/Input';
 import { Button } from '../common/Button';
 import { validateEmail } from '../../utils/validation';
 import { AUTH_CONSTANTS } from '../../constants/authConstants';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { useGetCartQuery } from '../../store/api/cartApi';
+import { updateCartFromServer } from '../../store/slices/cartSlice';
 
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
@@ -17,6 +19,7 @@ export const LoginForm: React.FC = () => {
   
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const { refetch } = useGetCartQuery();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -31,14 +34,19 @@ export const LoginForm: React.FC = () => {
     try {
       const response = await authService.login(email, password);
       
-      await dispatch(loginUser({
-        userData: {
-          id: response.user.id,
-          name: response.user.name,
-          email: response.user.email
-        },
-        token: response.token
-      })).unwrap();
+      dispatch(setUser({
+        id: response.user.id,
+        name: response.user.name,
+        email: response.user.email
+      }));
+      
+      localStorage.setItem('token', response.token);
+      
+      // Fetch cart data after successful login
+      const { data: cartData } = await refetch();
+      if (cartData) {
+        dispatch(updateCartFromServer(cartData));
+      }
 
       navigate('/');
     } catch (err) {

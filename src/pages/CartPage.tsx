@@ -1,11 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { removeFromCart, updateQuantity, syncCart } from '../store/slices/cartSlice';
+import { removeFromCart, updateQuantity } from '../store/slices/cartSlice';
 import { RootState } from '../store';
 import { useAppDispatch } from '../hooks/useAppDispatch';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { calculateCartTotal } from '../utils/cartUtils';
+import { useUpdateCartMutation } from '../store/api/cartApi';
 
 import { 
   ShoppingBagIcon, 
@@ -21,16 +22,60 @@ const CartPage: React.FC = () => {
   const auth = useSelector((state: RootState) => state.auth);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [updateCart] = useUpdateCartMutation();
 
   useEffect(() => {
     const syncCartData = async () => {
-      if (auth.isAuthenticated) {
-        await dispatch(syncCart()).unwrap();
+      if (auth.isAuthenticated && cart.items.length > 0) {
+        try {
+          await updateCart({
+            items: cart.items,
+            total: cart.total
+          }).unwrap();
+        } catch (error) {
+          console.error('Failed to sync cart:', error);
+        }
       }
     };
 
     syncCartData();
-  }, [cart.items, auth.isAuthenticated, dispatch]);
+  }, [cart.items, cart.total, auth.isAuthenticated, updateCart]);
+
+  const handleUpdateQuantity = async (itemId: string, newQuantity: number) => {
+    dispatch(updateQuantity({ itemId, quantity: newQuantity }));
+    
+    if (auth.isAuthenticated) {
+      const updatedItems = cart.items.map(item =>
+        item._id === itemId ? { ...item, quantity: newQuantity } : item
+      );
+      
+      try {
+        await updateCart({
+          items: updatedItems,
+          total: calculateCartTotal(updatedItems)
+        }).unwrap();
+      } catch (error) {
+        console.error('Failed to sync cart:', error);
+      }
+    }
+  };
+
+  const handleRemoveItem = async (itemId: string) => {
+    dispatch(removeFromCart(itemId));
+    
+    if (auth.isAuthenticated) {
+      const updatedItems = cart.items.filter(item => item._id !== itemId);
+      
+      try {
+        await updateCart({
+          items: updatedItems,
+          total: calculateCartTotal(updatedItems)
+        }).unwrap();
+      } catch (error) {
+        console.error('Failed to sync cart:', error);
+      }
+    }
+  };
 
   if (cart.items.length === 0) {
     return (
@@ -89,8 +134,8 @@ const CartPage: React.FC = () => {
                       </p>
                     </div>
                     <button
-                      onClick={() => dispatch(removeFromCart(item._id))}
-                      className="p-2 text-gray-400 hover:text-red-500 transition-colors rounded-full hover:bg-red-50"
+                      onClick={() => handleRemoveItem(item._id)}
+                      className="p-2 text-gray-400 hover:text-red-500"
                     >
                       <TrashIcon className="w-5 h-5" />
                     </button>
@@ -101,10 +146,7 @@ const CartPage: React.FC = () => {
                     <div className="flex items-center space-x-4">
                       <div className="flex items-center bg-gray-50 rounded-lg p-1">
                         <button
-                          onClick={() => dispatch(updateQuantity({ 
-                            itemId: item._id, 
-                            quantity: item.quantity - 1 
-                          }))}
+                          onClick={() => handleUpdateQuantity(item._id, item.quantity - 1)}
                           className="p-1 hover:bg-white rounded-md transition-colors"
                           disabled={item.quantity <= 1}
                         >
@@ -114,10 +156,7 @@ const CartPage: React.FC = () => {
                           {item.quantity}
                         </span>
                         <button
-                          onClick={() => dispatch(updateQuantity({ 
-                            itemId: item._id, 
-                            quantity: item.quantity + 1 
-                          }))}
+                          onClick={() => handleUpdateQuantity(item._id, item.quantity + 1)}
                           className="p-1 hover:bg-white rounded-md transition-colors"
                         >
                           <PlusSmallIcon className="w-5 h-5 text-gray-600" />
