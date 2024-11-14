@@ -1,10 +1,12 @@
-import React from 'react';
-import { useSelector, useDispatch } from 'react-redux';
-import { removeFromCart, updateQuantity } from '../store/slices/cartSlice';
+import React, { useEffect } from 'react';
+import { useSelector } from 'react-redux';
+import { removeFromCart, updateQuantity, syncCart } from '../store/slices/cartSlice';
 import { RootState } from '../store';
+import { useAppDispatch } from '../hooks/useAppDispatch';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '../components/common/Button';
 import { calculateCartTotal } from '../utils/cartUtils';
+
 import { 
   ShoppingBagIcon, 
   ArrowLeftIcon,
@@ -16,8 +18,19 @@ import { PAGE_CONSTANTS } from '../constants/pageConstants';
 
 const CartPage: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart);
-  const dispatch = useDispatch();
+  const auth = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
+
+  useEffect(() => {
+    const syncCartData = async () => {
+      if (auth.isAuthenticated) {
+        await dispatch(syncCart()).unwrap();
+      }
+    };
+
+    syncCartData();
+  }, [cart.items, auth.isAuthenticated, dispatch]);
 
   if (cart.items.length === 0) {
     return (

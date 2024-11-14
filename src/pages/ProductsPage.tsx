@@ -1,13 +1,10 @@
 import React from 'react';
-import { useDispatch } from 'react-redux';
-import { ProductCard } from '../components/product/ProductCard';
-import { addToCart } from '../store/slices/cartSlice';
+import { MemoizedProductCard } from '../components/product/ProductCard';
 import { Product } from '../types';
 import { api } from '../services/api';
 import { Loader2 } from 'lucide-react';
 
 const ProductsPage: React.FC = () => {
-  const dispatch = useDispatch();
   const [products, setProducts] = React.useState<Product[]>([]);
   const [loading, setLoading] = React.useState(false);
   const [error, setError] = React.useState<string>('');
@@ -28,10 +25,6 @@ const ProductsPage: React.FC = () => {
 
     fetchProducts();
   }, []);
-
-  const handleAddToCart = (product: Product) => {
-    dispatch(addToCart(product));
-  };
 
   if (loading) {
     return (
@@ -61,10 +54,9 @@ const ProductsPage: React.FC = () => {
     <div className="container mx-auto px-4 py-8">
       <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
         {products.map((product) => (
-          <ProductCard
+          <MemoizedProductCard
             key={product._id}
             product={product}
-            onAddToCart={handleAddToCart}
           />
         ))}
       </div>

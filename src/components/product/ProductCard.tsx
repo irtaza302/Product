@@ -1,19 +1,35 @@
-import React from 'react';
+import React, { useCallback, memo } from 'react';
 import { Product } from '../../types';
 import { ShoppingCart, Heart } from 'lucide-react';
 import { PRODUCT_CONSTANTS } from '../../constants/productConstants';
+import { useAppDispatch } from '../../hooks/useAppDispatch';
+import { addToCart, syncCart } from '../../store/slices/cartSlice';
 
 interface ProductCardProps {
   product: Product;
-  onAddToCart: (product: Product) => void;
   loading?: boolean;
+  onAddToCart?: (product: Product) => Promise<void>;
 }
 
-export const ProductCard: React.FC<ProductCardProps> = ({ 
-  product, 
-  onAddToCart, 
-  loading = false 
-}) => {
+// Custom comparison function for memo
+const areEqual = (prevProps: ProductCardProps, nextProps: ProductCardProps): boolean => {
+  return (
+    prevProps.loading === nextProps.loading &&
+    prevProps.product._id === nextProps.product._id &&
+    prevProps.product.price === nextProps.product.price &&
+    prevProps.product.stock === nextProps.product.stock
+  );
+};
+
+const ProductCard: React.FC<ProductCardProps> = ({ product, loading = false }) => {
+  const dispatch = useAppDispatch();
+
+  // Memoize the callback to prevent recreation on every render
+  const handleAddToCart = useCallback(async () => {
+    dispatch(addToCart(product));
+    await dispatch(syncCart()).unwrap();
+  }, [dispatch, product]);
+
   if (loading) {
     return (
       <div className="group relative bg-white rounded-2xl p-4 shadow-sm animate-pulse">
@@ -40,6 +56,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           src={product.image} 
           alt={product.name}
           className="absolute inset-0 h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
+          loading="lazy" // Add lazy loading for images
         />
       </div>
       
@@ -68,7 +85,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
         </div>
 
         <button
-          onClick={() => onAddToCart(product)}
+          onClick={handleAddToCart}
           disabled={product.stock === 0}
           className="w-full mt-2 flex items-center justify-center space-x-2 bg-gradient-to-r from-primary-600 to-secondary-600 text-white py-2 rounded-lg hover:shadow-md hover:scale-[1.02] transition-all duration-300 group disabled:opacity-50 disabled:cursor-not-allowed"
         >
@@ -82,4 +99,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
       </div>
     </div>
   );
-}; 
+};
+
+// Export memoized component with custom comparison
+export const MemoizedProductCard = memo(ProductCard, areEqual);

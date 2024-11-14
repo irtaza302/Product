@@ -5,6 +5,78 @@ import { AuthRequest, auth } from '../middleware/auth.js';
 
 const router = express.Router();
 
+/**
+ * @swagger
+ * components:
+ *   schemas:
+ *     Product:
+ *       type: object
+ *       required:
+ *         - name
+ *         - description
+ *         - price
+ *         - image
+ *         - category
+ *         - stock
+ *       properties:
+ *         _id:
+ *           type: string
+ *           description: Auto-generated product ID
+ *         name:
+ *           type: string
+ *           description: Product name
+ *         description:
+ *           type: string
+ *           description: Product description
+ *         price:
+ *           type: number
+ *           description: Product price
+ *         image:
+ *           type: string
+ *           description: Product image URL
+ *         category:
+ *           type: string
+ *           description: Product category
+ *         stock:
+ *           type: number
+ *           description: Available stock
+ */
+
+/**
+ * @swagger
+ * /api/products:
+ *   get:
+ *     summary: Get all products
+ *     tags: [Products]
+ *     responses:
+ *       200:
+ *         description: List of products
+ *         content:
+ *           application/json:
+ *             schema:
+ *               type: array
+ *               items:
+ *                 $ref: '#/components/schemas/Product'
+ *   post:
+ *     summary: Create a new product
+ *     tags: [Products]
+ *     security:
+ *       - bearerAuth: []
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/Product'
+ *     responses:
+ *       201:
+ *         description: Product created successfully
+ *       401:
+ *         description: Unauthorized
+ *       400:
+ *         description: Invalid input
+ */
+
 router.get('/', async (_req, res) => {
   try {
     const products = await Product.find({}).lean();

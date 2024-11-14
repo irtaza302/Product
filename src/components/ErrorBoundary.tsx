@@ -10,6 +10,10 @@ interface State {
   error?: Error;
 }
 
+interface ErrorInfo {
+  componentStack: string;
+}
+
 export class ErrorBoundary extends React.Component<Props, State> {
   constructor(props: Props) {
     super(props);
@@ -20,7 +24,7 @@ export class ErrorBoundary extends React.Component<Props, State> {
     return { hasError: true, error };
   }
 
-  public componentDidCatch(error: Error, errorInfo: React.ErrorInfo) {
+  public componentDidCatch(error: Error, errorInfo: ErrorInfo): void {
     console.error('Error caught by boundary:', error, errorInfo);
     // You could add error reporting service here
   }

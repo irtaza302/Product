@@ -7,7 +7,7 @@ export const orderService = {
     items: OrderItem[], 
     shippingDetails: ShippingDetails, 
     total: number 
-  }) => {
+  }): Promise<{ success: boolean, order: Order }> => {
     try {
       const response = await axios.post<{ success: boolean, order: Order }>('/orders', data);
       return response.data;
@@ -16,7 +16,7 @@ export const orderService = {
     }
   },
 
-  checkStock: async (productId: string) => {
+  checkStock: async (productId: string): Promise<{ stock: number }> => {
     try {
       const response = await axios.get<{ stock: number }>(`/orders/check-stock/${productId}`);
       return response.data;

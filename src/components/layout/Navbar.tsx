@@ -1,8 +1,9 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { clearUser } from '../../store/slices/authSlice';
+import { clearCart } from '../../store/slices/cartSlice';
 import { ShoppingCart, LogOut } from 'lucide-react';
 import type { CartItem } from '../../types';
 import { UI_CONSTANTS } from '../../constants/uiConstants';
@@ -15,9 +16,20 @@ const Navbar: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart);
   const auth = useSelector((state: RootState) => state.auth);
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const handleLogout = () => {
     dispatch(clearUser());
+    dispatch(clearCart());
+  };
+
+  const handleCartClick = (e: React.MouseEvent) => {
+    e.preventDefault();
+    if (cart.items.length === 0) {
+      navigate('/');
+    } else {
+      navigate('/cart');
+    }
   };
 
   return (
@@ -37,14 +49,17 @@ const Navbar: React.FC = () => {
             >
               {UI_CONSTANTS.PRODUCTS_LINK_TEXT}
             </Link>
-            <Link to="/cart" className="relative group">
+            <button 
+              onClick={handleCartClick}
+              className="relative group"
+            >
               <ShoppingCart className="w-6 h-6 text-gray-700 group-hover:text-primary-600 transition-all group-hover:scale-110" />
               {getTotalItemsCount(cart.items) > 0 && (
                 <span className="absolute -top-2 -right-2 bg-primary-600 text-white text-xs rounded-full w-5 h-5 flex items-center justify-center">
                   {getTotalItemsCount(cart.items)}
                 </span>
               )}
-            </Link>
+            </button>
             {auth.isAuthenticated ? (
               <div className="flex items-center space-x-4">
                 <span className="text-gray-700">{auth.user?.name}</span>
