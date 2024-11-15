@@ -117,6 +117,29 @@ A modern, full-stack ecommerce platform built with React, TypeScript, and Vite, 
 - Access the application at `http://localhost:5173`.
 - API documentation is available at `http://localhost:5000/api-docs`.
 
+## API Documentation
+
+The API is documented using Swagger/OpenAPI. You can explore and test the API endpoints through the interactive Swagger UI:
+
+- **Development**: `http://localhost:5000/api-docs`
+- **Staging**: `https://staging-api.ecomstore.com/api-docs`
+- **Production**: `https://api.ecomstore.com/api-docs`
+
+The documentation includes:
+
+- 🔑 Authentication endpoints
+- 📦 Product management
+- 🛒 Cart operations
+- 📋 Order processing
+- 📝 Detailed request/response schemas
+- 🔒 Security specifications
+
+Each endpoint includes:
+- Request/response examples
+- Required parameters
+- Authentication requirements
+- Response codes and error handling
+
 ## Scripts
 
 - `npm run dev`: Start the frontend development server.
