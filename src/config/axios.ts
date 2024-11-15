@@ -3,7 +3,7 @@ import { store } from '../store';
 import { clearUser } from '../store/slices/authSlice';
 
 const instance = axios.create({
-  baseURL: 'http://localhost:5000/api',
+  baseURL: '/api',
   headers: {
     'Content-Type': 'application/json',
   },
