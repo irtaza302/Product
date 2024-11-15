@@ -1,4 +1,4 @@
-import React, { useCallback, memo } from 'react';
+import React, { memo, useCallback } from 'react';
 import { Product } from '../../types';
 import { ShoppingCart, Heart } from 'lucide-react';
 import { PRODUCT_CONSTANTS } from '../../constants/productConstants';
@@ -14,7 +14,7 @@ interface ProductCardProps {
   loading?: boolean;
 }
 
-const ProductCard: React.FC<ProductCardProps> = ({ product, loading = false }) => {
+const ProductCard: React.FC<ProductCardProps> = memo(({ product, loading = false }) => {
   const dispatch = useAppDispatch();
   const cart = useSelector((state: RootState) => state.cart);
   const auth = useSelector((state: RootState) => state.auth);
@@ -67,10 +67,20 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, loading = false }) =
 
       <div className="aspect-square overflow-hidden rounded-xl bg-gray-50 relative w-full h-[280px]">
         <img 
-          src={product.image} 
+          src={`${product.image}?w=300`}
+          srcSet={`
+            ${product.image}?w=300 300w,
+            ${product.image}?w=600 600w,
+            ${product.image}?w=900 900w
+          `}
+          sizes="(max-width: 768px) 300px, (max-width: 1200px) 600px, 900px"
+          loading="lazy"
+          decoding="async"
           alt={product.name}
-          className="absolute inset-0 h-full w-full object-cover object-center group-hover:scale-105 transition-transform duration-500"
-          loading="lazy" // Add lazy loading for images
+          className="w-full h-full object-cover transform hover:scale-105 transition-transform duration-300"
+          onError={(e) => {
+            (e.target as HTMLImageElement).src = '/fallback-image.jpg';
+          }}
         />
       </div>
       
@@ -113,6 +123,12 @@ const ProductCard: React.FC<ProductCardProps> = ({ product, loading = false }) =
       </div>
     </div>
   );
-};
+}, (prevProps, nextProps) => {
+  // Custom comparison function
+  return prevProps.product._id === nextProps.product._id &&
+         prevProps.product.stock === nextProps.product.stock &&
+         prevProps.product.price === nextProps.product.price;
+});
 
-export const MemoizedProductCard = memo(ProductCard);
+export const MemoizedProductCard = ProductCard;
+export default ProductCard;

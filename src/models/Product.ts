@@ -1,20 +1,6 @@
-import mongoose, { Document, Schema } from 'mongoose';
+import mongoose, { Schema } from 'mongoose';
 
-export interface IProduct {
-  name: string;
-  description: string;
-  price: number;
-  image: string;
-  category: string;
-  stock: number;
-}
-
-export interface ProductDocument extends IProduct, Document {
-  createdAt: Date;
-  updatedAt: Date;
-}
-
-const productSchema = new Schema<ProductDocument>({
+const productSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
@@ -23,15 +9,18 @@ const productSchema = new Schema<ProductDocument>({
   stock: { type: Number, required: true },
 }, {
   timestamps: true,
-  toJSON: {
-    transform: (_, ret) => {
-      ret.id = ret._id;
-      delete ret._id;
-      delete ret.__v;
-      return ret;
-    }
-  }
 });
 
-const Product = mongoose.model<ProductDocument>('Product', productSchema);
+// Add indexes for frequently queried fields
+productSchema.index({ name: 'text', description: 'text' }); // Text search index
+productSchema.index({ category: 1 }); // Category lookup
+productSchema.index({ price: 1 }); // Price sorting
+productSchema.index({ stock: 1 }); // Stock filtering
+productSchema.index({ createdAt: -1 }); // Latest products
+
+// Compound indexes for common query patterns
+productSchema.index({ category: 1, price: 1 }); // Category + price filtering
+productSchema.index({ category: 1, stock: 1 }); // Category + stock filtering
+
+const Product = mongoose.model('Product', productSchema);
 export default Product; 

@@ -5,11 +5,13 @@ import { store } from './store';
 import { ErrorBoundary } from './components/ErrorBoundary';
 import { router } from './routes';
 import { CartInitializer } from './components/cart/CartInitializer';
+import { AuthInitializer } from './components/auth/AuthInitializer';
 
 const App: React.FC = () => {
   return (
     <Provider store={store}>
       <ErrorBoundary>
+        <AuthInitializer />
         <CartInitializer />
         <RouterProvider router={router} />
       </ErrorBoundary>

@@ -5,23 +5,27 @@ export const productsApi = baseApi.injectEndpoints({
   endpoints: (builder) => ({
     getProducts: builder.query<Product[], void>({
       query: () => '/products',
+      keepUnusedDataFor: 300, // Cache for 5 minutes
       providesTags: ['Products'],
     }),
     
-    getProduct: builder.query<Product, string>({
-      query: (id) => `/products/${id}`,
-      providesTags: (_result, _error, id) => [{ type: 'Products', id }],
-    }),
-
     checkStock: builder.query<{ stock: number }, string>({
       query: (productId) => `/orders/check-stock/${productId}`,
+      keepUnusedDataFor: 60, // Cache for 1 minute
     }),
   }),
+  overrideExisting: false,
 });
+
+// Configure polling in the component instead
+export const useGetProductsWithPolling = (pollingInterval?: number) => {
+  return useGetProductsQuery(undefined, {
+    pollingInterval: process.env.NODE_ENV === 'production' ? pollingInterval : undefined,
+  });
+};
 
 export const {
   useGetProductsQuery,
-  useGetProductQuery,
   useCheckStockQuery,
   endpoints: productEndpoints,
 } = productsApi; 

@@ -11,7 +11,7 @@ import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { useGetCartQuery } from '../../store/api/cartApi';
 import { updateCartFromServer } from '../../store/slices/cartSlice';
 
-export const LoginForm: React.FC = () => {
+const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [error, setError] = useState('');
@@ -101,4 +101,7 @@ export const LoginForm: React.FC = () => {
       </form>
     </div>
   );
-}; 
+};
+
+// Export as default
+export default LoginForm; 

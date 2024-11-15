@@ -21,5 +21,20 @@ export default defineConfig({
     alias: {
       '@': path.resolve(__dirname, './src')
     }
-  }
+  },
+  build: {
+    rollupOptions: {
+      input: {
+        main: path.resolve(__dirname, 'index.html'),
+        serviceWorker: path.resolve(__dirname, 'src/serviceWorker.ts'),
+      },
+      output: {
+        entryFileNames: (assetInfo) => {
+          return assetInfo.name === 'serviceWorker' 
+            ? '[name].js' // Keep service worker at root
+            : 'assets/[name]-[hash].js';
+        },
+      },
+    },
+  },
 });
