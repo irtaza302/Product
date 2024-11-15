@@ -8,17 +8,16 @@ const connectDB = async (): Promise<void> => {
       throw new Error(MESSAGES.ERRORS.MONGO_URI_NOT_DEFINED);
     }
 
-    await mongoose.connect(uri, {
+    const options = {
       serverSelectionTimeoutMS: 5000,
       socketTimeoutMS: 45000,
-    });
-    
-    // Check if connection is established
-    if (mongoose.connection.readyState !== 1) {
-      throw new Error('Failed to connect to MongoDB');
-    }
+      maxPoolSize: 10,
+      retryWrites: true,
+    };
 
-    // Test the connection without using .db directly
+    await mongoose.connect(uri, options);
+
+    // Test the connection
     await mongoose.connection.db?.admin().ping();
     console.log('MongoDB Connected Successfully');
   } catch (error) {
