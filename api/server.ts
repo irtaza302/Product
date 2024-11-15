@@ -1,8 +1,7 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import mongoose from 'mongoose';
+import { Schema, model, models, connect, connection } from 'mongoose';
 
-// Define Product Schema
-const ProductSchema = new mongoose.Schema({
+const ProductSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String, required: true },
   price: { type: Number, required: true },
@@ -13,28 +12,21 @@ const ProductSchema = new mongoose.Schema({
   timestamps: true
 });
 
-// MongoDB connection
-async function connectDB() {
-  try {
-    if (!process.env.MONGO_URI) {
-      throw new Error('MONGO_URI is not defined');
-    }
-    
-    if (mongoose.connection.readyState !== 1) {
-      await mongoose.connect(process.env.MONGO_URI);
-    }
-  } catch (error) {
-    console.error('MongoDB connection error:', error);
-    throw error;
+const connectDB = async () => {
+  if (!process.env.MONGO_URI) {
+    throw new Error('MONGO_URI is not defined');
   }
-}
+  
+  if (connection.readyState !== 1) {
+    await connect(process.env.MONGO_URI);
+  }
+};
 
-// Export the handler as default
-export default async function handler(req: VercelRequest, res: VercelResponse) {
+const handler = async (req: VercelRequest, res: VercelResponse) => {
   try {
     await connectDB();
     
-    const Product = mongoose.models.Product || mongoose.model('Product', ProductSchema);
+    const Product = models.Product || model('Product', ProductSchema);
     const products = await Product.find({}).lean();
     
     return res.status(200).json(products);
@@ -45,4 +37,6 @@ export default async function handler(req: VercelRequest, res: VercelResponse) {
       message: error instanceof Error ? error.message : 'Unknown error'
     });
   }
-} 
+};
+
+export default handler; 

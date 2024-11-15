@@ -1,8 +1,8 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "ES2022",
-    "moduleResolution": "node",
+    "module": "ESNext",
+    "moduleResolution": "bundler",
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
@@ -12,6 +12,6 @@
     "isolatedModules": true,
     "types": ["@vercel/node"]
   },
-  "include": ["api/**/*", "src/types/**/*", "src/constants/**/*"],
+  "include": ["api/**/*"],
   "exclude": ["node_modules"]
 }
