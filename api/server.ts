@@ -29,6 +29,7 @@ async function connectDB() {
   }
 }
 
+// Export the handler as default
 export default async function handler(req: VercelRequest, res: VercelResponse) {
   try {
     await connectDB();
