@@ -7,7 +7,7 @@
     "dev": "vite --host",
     "dev:server": "kill-port 5000 && nodemon --watch src/server --watch src/models --watch src/types --ext ts,js --exec tsx src/server/index.ts",
     "dev:all": "concurrently \"npm run dev\" \"npm run dev:server\"",
-    "build": "tsc -b && vite build",
+    "build": "tsc && vite build",
     "lint": "eslint .",
     "preview": "vite preview",
     "seed": "cross-env NODE_ENV=development MONGO_URI=\"your-mongo-uri\" TS_NODE_PROJECT=tsconfig.seed.json node --loader ts-node/esm src/config/seedData.ts"
@@ -54,6 +54,7 @@
     "@types/node": "^22.9.0",
     "@types/react": "^18.3.12",
     "@types/react-dom": "^18.3.1",
+    "@vercel/node": "^3.2.24",
     "@vitejs/plugin-react": "^4.3.3",
     "autoprefixer": "^10.4.20",
     "concurrently": "^7.6.0",

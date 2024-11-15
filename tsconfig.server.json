@@ -1,16 +1,17 @@
 {
   "compilerOptions": {
     "target": "ES2020",
-    "module": "NodeNext",
-    "moduleResolution": "NodeNext",
+    "module": "ES2022",
+    "moduleResolution": "node",
     "esModuleInterop": true,
     "strict": true,
     "skipLibCheck": true,
-    "outDir": "./dist",
-    "rootDir": "./src"
+    "outDir": "dist",
+    "allowJs": true,
+    "resolveJsonModule": true,
+    "isolatedModules": true,
+    "types": ["@vercel/node"]
   },
-  "include": ["src/server/**/*"],
-  "ts-node": {
-    "esm": true
-  }
+  "include": ["api/**/*", "src/types/**/*", "src/constants/**/*"],
+  "exclude": ["node_modules"]
 }
