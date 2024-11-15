@@ -1,14 +1,6 @@
 import type { VercelRequest, VercelResponse } from '@vercel/node';
-import express from 'express';
-import cors from 'cors';
 import mongoose from 'mongoose';
 import { MESSAGES } from '../src/constants/messages';
-
-const app = express();
-
-// Initialize middleware
-app.use(cors());
-app.use(express.json());
 
 // MongoDB connection
 const connectDB = async () => {
@@ -18,11 +10,7 @@ const connectDB = async () => {
       throw new Error(MESSAGES.ERRORS.MONGO_URI_NOT_DEFINED);
     }
 
-    await mongoose.connect(uri, {
-      serverSelectionTimeoutMS: 5000,
-      socketTimeoutMS: 45000,
-    });
-
+    await mongoose.connect(uri);
     console.log('MongoDB Connected');
   } catch (error) {
     console.error('MongoDB Connection Error:', error);
@@ -30,27 +18,36 @@ const connectDB = async () => {
   }
 };
 
-// Convert Express app to Vercel serverless function
+// Define Product Schema
+const ProductSchema = new mongoose.Schema({
+  name: String,
+  description: String,
+  price: Number,
+  image: String,
+  category: String,
+  stock: Number
+}, {
+  timestamps: true
+});
+
 const handler = async (req: VercelRequest, res: VercelResponse) => {
   try {
     await connectDB();
     
-    const Product = mongoose.model('Product', new mongoose.Schema({
-      name: String,
-      description: String,
-      price: Number,
-      image: String,
-      category: String,
-      stock: Number
-    }));
-
+    const Product = mongoose.models.Product || mongoose.model('Product', ProductSchema);
     const products = await Product.find({}).lean();
-    res.json(products);
+    
+    res.status(200).json(products);
   } catch (err) {
-    console.error('Error fetching products:', err);
+    console.error('Error:', err);
     res.status(500).json({ 
-      message: err instanceof Error ? err.message : 'Error fetching products'
+      message: err instanceof Error ? err.message : 'Internal server error'
     });
+  } finally {
+    // Close the connection
+    if (mongoose.connection.readyState === 1) {
+      await mongoose.disconnect();
+    }
   }
 };
 
