@@ -1,9 +1,16 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
+const getBaseUrl = () => {
+  if (process.env.NODE_ENV === 'production') {
+    return '/api';
+  }
+  return '/api';
+};
+
 export const baseApi = createApi({
   reducerPath: 'api',
   baseQuery: fetchBaseQuery({ 
-    baseUrl: '/api',
+    baseUrl: getBaseUrl(),
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
       if (token) {

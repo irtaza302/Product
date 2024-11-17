@@ -7,9 +7,13 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "rootDir": "./src"
+    "rootDir": "./src",
+    "baseUrl": ".",
+    "paths": {
+      "@constants/*": ["src/public/constants/*"]
+    }
   },
-  "include": ["src/server/**/*"],
+  "include": ["src/server/**/*", "src/models/**/*", "src/types/**/*", "src/constants/**/*"],
   "ts-node": {
     "esm": true
   }

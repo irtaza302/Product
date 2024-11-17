@@ -2,11 +2,12 @@ import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { removeFromCart, updateQuantity } from '../store/slices/cartSlice';
 import { RootState } from '../store';
-import { useAppDispatch } from '../hooks/useAppDispatch';
+import { useAppDispatch } from '../hooks';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../components/common/Button';
-import { calculateCartTotal } from '../utils/cartUtils';
-import { useUpdateCartMutation } from '../store/api/cartApi';
+import { Button } from '../components';
+import { calculateCartTotal } from '../utils';
+import { useUpdateCartMutation } from '../store/api';
+import { PAGE_CONSTANTS } from '@constants/pageConstants';
 
 import { 
   ShoppingBagIcon, 
@@ -15,7 +16,6 @@ import {
   MinusSmallIcon, 
   TrashIcon 
 } from '@heroicons/react/24/outline';
-import { PAGE_CONSTANTS } from '../constants/pageConstants';
 
 const CartPage: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart);

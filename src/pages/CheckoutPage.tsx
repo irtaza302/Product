@@ -1,17 +1,16 @@
 import React, { useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../store';
 import { clearCart } from '../store/slices/cartSlice';
-import { useCreateOrderMutation } from '../store/api/ordersApi';
-import { LoadingSpinner } from '../components/common/LoadingSpinner';
-import { validateShippingDetails } from '../utils/validation';
-import { useStockCheck } from '../hooks/useStockCheck';
+import { useCreateOrderMutation } from '../store/api';
+import { LoadingSpinner } from '../components';
+import { validateShippingDetails } from '../utils';
+import { useStockCheck } from '../hooks';
 import type { ShippingDetails } from '../types';
 
 const CheckoutPage: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart);
-  const dispatch = useDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [shippingDetails, setShippingDetails] = useState<ShippingDetails>({
@@ -59,7 +58,7 @@ const CheckoutPage: React.FC = () => {
       }).unwrap();
 
       if (response.success) {
-        dispatch(clearCart());
+        clearCart();
         navigate('/order-success', { 
           state: { 
             orderDetails: {

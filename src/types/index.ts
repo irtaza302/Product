@@ -19,6 +19,7 @@ export interface Product extends BaseEntity {
   image: string;
   category: string;
   stock: number;
+  rating?: number;
 }
 
 export interface CartItem extends Product {

@@ -1,8 +1,7 @@
 import express from 'express';
-import Product from '../../models/Product.js';
+import { Product } from '../../models/index.js';
 import type { ErrorResponse } from '../../types/index.js';
 import { AuthRequest, auth } from '../middleware/auth.js';
-
 const router = express.Router();
 
 /**
