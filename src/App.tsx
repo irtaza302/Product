@@ -2,9 +2,10 @@ import React from 'react';
 import { RouterProvider } from 'react-router-dom';
 import { Provider } from 'react-redux';
 import { store } from './store';
-import { ErrorBoundary, CartInitializer } from './components';
-import { router } from './routes';
+import { ErrorBoundary } from './components/ErrorBoundary';
+import { CartInitializer } from './components';
 import { AuthPersist } from './components/auth/AuthPersist';
+import { router } from './routes';
 
 const App: React.FC = () => {
   return (
