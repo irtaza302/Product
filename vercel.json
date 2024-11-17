@@ -8,9 +8,7 @@
         "includeFiles": [
           "src/constants/**/*",
           "src/models/**/*",
-          "src/types/**/*",
-          "public/constants/**/*",
-          "tsconfig*.json"
+          "src/types/**/*"
         ]
       }
     },
