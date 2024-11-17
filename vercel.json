@@ -9,7 +9,8 @@
           "src/constants/**/*",
           "src/models/**/*",
           "src/types/**/*",
-          "public/constants/**/*"
+          "public/constants/**/*",
+          "tsconfig*.json"
         ]
       }
     },
