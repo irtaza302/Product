@@ -1,16 +1,13 @@
 import { createApi, fetchBaseQuery } from '@reduxjs/toolkit/query/react';
 
-const getBaseUrl = () => {
-  if (process.env.NODE_ENV === 'production') {
-    return '/api';
-  }
-  return '/api';
-};
+const baseUrl = process.env.NODE_ENV === 'production' 
+  ? 'https://product-mru.vercel.app/api'
+  : 'http://localhost:5000/api';
 
 export const baseApi = createApi({
   reducerPath: 'api',
-  baseQuery: fetchBaseQuery({ 
-    baseUrl: getBaseUrl(),
+  baseQuery: fetchBaseQuery({
+    baseUrl,
     prepareHeaders: (headers) => {
       const token = localStorage.getItem('token');
       if (token) {
@@ -19,6 +16,5 @@ export const baseApi = createApi({
       return headers;
     },
   }),
-  tagTypes: ['Products', 'Cart', 'Orders'],
   endpoints: () => ({}),
 }); 
