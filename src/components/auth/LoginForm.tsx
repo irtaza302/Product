@@ -1,15 +1,14 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
-import { authService } from '../../services/authService';
+import { authService } from '../../services';
 import { setUser } from '../../store/slices/authSlice';
-import { Input } from '../common/Input';
-import { Button } from '../common/Button';
-import { validateEmail } from '../../utils/validation';
-import { AUTH_CONSTANTS } from '../../constants/authConstants';
-import { useAppDispatch } from '../../hooks/useAppDispatch';
-import { useGetCartQuery } from '../../store/api/cartApi';
+import { Input, Button } from '../../components';
+import { validateEmail } from '../../utils';
+import { useAppDispatch } from '../../hooks';
+import { useGetCartQuery } from '../../store/api';
 import { updateCartFromServer } from '../../store/slices/cartSlice';
+import { AUTH_CONSTANTS } from '@constants/authConstants';
 
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');
