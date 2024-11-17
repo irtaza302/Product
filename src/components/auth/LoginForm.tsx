@@ -8,7 +8,7 @@ import { validateEmail } from '../../utils';
 import { useAppDispatch } from '../../hooks';
 import { useGetCartQuery } from '../../store/api';
 import { updateCartFromServer } from '../../store/slices/cartSlice';
-import { AUTH_CONSTANTS } from '../../constants/authConstants';
+import { AUTH_CONSTANTS } from '@constants/authConstants';
 
 export const LoginForm: React.FC = () => {
   const [email, setEmail] = useState('');

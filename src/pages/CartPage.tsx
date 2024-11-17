@@ -7,7 +7,7 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '../components';
 import { calculateCartTotal } from '../utils';
 import { useUpdateCartMutation } from '../store/api';
-import { PAGE_CONSTANTS } from '../constants/pageConstants';
+import { PAGE_CONSTANTS } from '@constants/pageConstants';
 
 import { 
   ShoppingBagIcon, 

@@ -18,7 +18,12 @@
     "strict": true,
     "noUnusedLocals": true,
     "noUnusedParameters": true,
-    "noFallthroughCasesInSwitch": true
+    "noFallthroughCasesInSwitch": true,
+
+    "baseUrl": ".",
+    "paths": {
+      "@constants/*": ["./public/constants/*"]
+    }
   },
   "include": ["src"],
   "exclude": ["src/server/**/*"]

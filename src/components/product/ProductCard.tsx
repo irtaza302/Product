@@ -1,7 +1,7 @@
 import React, { useCallback, memo } from 'react';
 import { Product } from '../../types';
 import { ShoppingCart, Heart } from 'lucide-react';
-import { PRODUCT_CONSTANTS } from '../../constants/productConstants';
+import { PRODUCT_CONSTANTS } from '@constants/productConstants';
 import { useAppDispatch } from '../../hooks/useAppDispatch';
 import { addToCart } from '../../store/slices/cartSlice';
 import { useUpdateCartMutation } from '../../store/api/cartApi';

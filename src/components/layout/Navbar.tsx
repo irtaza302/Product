@@ -6,7 +6,7 @@ import { clearUser } from '../../store/slices/authSlice';
 import { clearCart } from '../../store/slices/cartSlice';
 import { ShoppingCart, LogOut } from 'lucide-react';
 import type { CartItem } from '../../types';
-import { UI_CONSTANTS } from '../../constants/uiConstants';
+import { UI_CONSTANTS } from '@constants/uiConstants';
 
 const getTotalItemsCount = (items: CartItem[]): number => {
   return items.reduce((total, item) => total + item.quantity, 0);

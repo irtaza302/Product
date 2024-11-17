@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { MESSAGES } from '../constants/messages';
+import { MESSAGES } from '@constants/messages';
 
 const connectDB = async (): Promise<void> => {
   try {
