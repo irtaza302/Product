@@ -16,11 +16,6 @@ const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
 dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
-console.log('Environment Check:');
-console.log('MONGO_URI:', process.env.MONGO_URI ? 'Set' : 'Not Set');
-console.log('PORT:', process.env.PORT ? 'Set' : 'Not Set');
-console.log('NODE_ENV:', process.env.NODE_ENV);
-
 const app = express();
 
 const startServer = async () => {
@@ -35,7 +30,6 @@ const startServer = async () => {
     app.use('/api/orders', orderRoutes);
     app.use('/api/cart', cartRoutes);
     app.use('/api/health', healthRoutes);
-
     app.use('/api-docs', swaggerUi.serve, swaggerUi.setup(specs));
 
     const PORT = process.env.PORT || 5000;
@@ -44,7 +38,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('Failed to start server:', error);
-    process.exit(1);
+    throw error; // Let Vercel handle the error
   }
 };
 

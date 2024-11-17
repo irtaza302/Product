@@ -3,7 +3,14 @@
   "builds": [
     {
       "src": "src/server/index.ts",
-      "use": "@vercel/node"
+      "use": "@vercel/node",
+      "config": {
+        "includeFiles": [
+          "src/constants/**/*",
+          "src/models/**/*",
+          "src/types/**/*"
+        ]
+      }
     },
     {
       "src": "package.json",

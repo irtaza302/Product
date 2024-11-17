@@ -1,6 +1,4 @@
 import mongoose from 'mongoose';
-import { MESSAGES } from '../constants/messages.js';
-
 let cachedConnection: typeof mongoose | null = null;
 
 const connectDB = async () => {

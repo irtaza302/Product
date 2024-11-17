@@ -1,54 +1,34 @@
 import swaggerJsdoc from 'swagger-jsdoc';
-import { SWAGGER_CONSTANTS } from '@constants/swaggerConstants';
+import { SWAGGER_CONSTANTS } from '../../constants/swaggerConstants.js';
 
 const options = {
   definition: {
     openapi: '3.0.0',
     info: {
       title: SWAGGER_CONSTANTS.TITLE,
-      version: SWAGGER_CONSTANTS.VERSION,
       description: SWAGGER_CONSTANTS.DESCRIPTION,
+      version: SWAGGER_CONSTANTS.VERSION,
       contact: SWAGGER_CONSTANTS.CONTACT
     },
     servers: [
       {
-        url: SWAGGER_CONSTANTS.SERVERS.DEV.URL,
-        description: SWAGGER_CONSTANTS.SERVERS.DEV.DESCRIPTION
+        url: process.env.NODE_ENV === 'production' 
+          ? process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://your-production-url.vercel.app'
+          : SWAGGER_CONSTANTS.SERVERS.DEV.URL,
+        description: process.env.NODE_ENV === 'production'
+          ? 'Production server'
+          : SWAGGER_CONSTANTS.SERVERS.DEV.DESCRIPTION
       }
     ],
     components: {
       securitySchemes: {
         bearerAuth: {
-          type: 'http',
-          scheme: 'bearer',
-          bearerFormat: 'JWT'
-        }
-      },
-      schemas: {
-        Error: {
-          type: 'object',
-          properties: {
-            message: {
-              type: 'string',
-              description: 'Error message'
-            },
-            code: {
-              type: 'string',
-              description: 'Error code'
-            }
-          }
+          type: SWAGGER_CONSTANTS.SECURITY.JWT.TYPE,
+          scheme: SWAGGER_CONSTANTS.SECURITY.JWT.SCHEME,
+          bearerFormat: SWAGGER_CONSTANTS.SECURITY.JWT.FORMAT
         }
       }
-    },
-    security: [{
-      bearerAuth: []
-    }],
-    tags: [
-      { name: SWAGGER_CONSTANTS.TAGS.AUTH, description: 'Authentication endpoints' },
-      { name: SWAGGER_CONSTANTS.TAGS.PRODUCTS, description: 'Product management endpoints' },
-      { name: SWAGGER_CONSTANTS.TAGS.ORDERS, description: 'Order management endpoints' },
-      { name: SWAGGER_CONSTANTS.TAGS.CART, description: 'Shopping cart endpoints' }
-    ]
+    }
   },
   apis: ['./src/server/routes/*.ts']
 };

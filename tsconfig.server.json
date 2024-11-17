@@ -10,7 +10,7 @@
     "rootDir": "./src",
     "baseUrl": ".",
     "paths": {
-      "@constants/*": ["src/public/constants/*"]
+      "@/*": ["./src/*"]
     }
   },
   "include": ["src/server/**/*", "src/models/**/*", "src/types/**/*", "src/constants/**/*"],
