@@ -18,10 +18,10 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"],
-      "@constants/*": ["./src/constants/*"]
+      "@constants/*": ["./public/constants/*"]
     }
   },
-  "include": ["src"],
+  "include": ["src", "public/constants"],
   "references": [{ "path": "./tsconfig.node.json" }]
 }
 

@@ -8,7 +8,8 @@
         "includeFiles": [
           "src/constants/**/*",
           "src/models/**/*",
-          "src/types/**/*"
+          "src/types/**/*",
+          "public/constants/**/*"
         ]
       }
     },
