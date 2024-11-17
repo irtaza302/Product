@@ -1,5 +1,5 @@
 import mongoose from 'mongoose';
-import { MESSAGES } from '@constants/messages';
+import { MESSAGES } from '../constants/messages.js';
 
 let cachedConnection: typeof mongoose | null = null;
 
@@ -19,7 +19,7 @@ const connectDB = async () => {
     });
     
     cachedConnection = mongoose;
-    console.log(MESSAGES.SUCCESS.MONGODB_CONNECTED);
+    console.log('MongoDB Connected Successfully');
     return conn;
   } catch (error) {
     console.error('Error connecting to MongoDB:', error);

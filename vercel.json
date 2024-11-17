@@ -25,10 +25,5 @@
       "src": "/(.*)",
       "dest": "/index.html"
     }
-  ],
-  "env": {
-    "MONGO_URI": "mongodb+srv://irtaza:zHEB5WMgilodE0i9@custer.bwz4t.mongodb.net/?retryWrites=true&w=majority&appName=Custer",
-    "JWT_SECRET": "6b39fb26f04f04fb2843a515925bc1923fddee6bb6b1efecaf7a329c8d8f6fa47ca537083b6629b6f4c70ab83fc248276f3e813cc131b9e23d1988e4359ddd3c",
-    "NODE_ENV": "production"
-  }
+  ]
 } 
