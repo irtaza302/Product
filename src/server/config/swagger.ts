@@ -13,7 +13,7 @@ const options = {
     servers: [
       {
         url: process.env.NODE_ENV === 'production' 
-          ? process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://your-production-url.vercel.app'
+          ? process.env.VERCEL_URL ? `https://${process.env.VERCEL_URL}` : 'https://product-mru.vercel.app/'
           : SWAGGER_CONSTANTS.SERVERS.DEV.URL,
         description: process.env.NODE_ENV === 'production'
           ? 'Production server'
