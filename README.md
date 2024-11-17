@@ -1,50 +1,139 @@
-# React + TypeScript + Vite
+# Ecommerce Store 🛍️
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A modern, full-stack ecommerce platform built with React, TypeScript, and Vite, featuring a robust Express backend with MongoDB. This application provides a complete shopping experience with user authentication, product management, cart functionality, and secure checkout process.
 
-Currently, two official plugins are available:
+<div align="center">
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+[![TypeScript](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)](https://www.typescriptlang.org/)
+[![React](https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB)](https://reactjs.org/)
+[![Vite](https://img.shields.io/badge/Vite-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev/)
+[![MongoDB](https://img.shields.io/badge/MongoDB-4EA94B?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![Docker](https://img.shields.io/badge/Docker-2496ED?style=for-the-badge&logo=docker&logoColor=white)](https://www.docker.com/)
 
-## Expanding the ESLint configuration
+</div>
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+## ✨ Features
 
-- Configure the top-level `parserOptions` property like this:
+- 🔐 **Secure Authentication**
+  - JWT-based user authentication
+  - Protected API routes
+  - Password encryption with bcrypt
 
-```js
-export default tseslint.config({
-  languageOptions: {
-    // other options...
-    parserOptions: {
-      project: ['./tsconfig.node.json', './tsconfig.app.json'],
-      tsconfigRootDir: import.meta.dirname,
-    },
-  },
-})
-```
+- 🛒 **Shopping Experience**
+  - Product catalog with search and filtering
+  - Real-time cart management
+  - Secure checkout process
+  - Order history and tracking
 
-- Replace `tseslint.configs.recommended` to `tseslint.configs.recommendedTypeChecked` or `tseslint.configs.strictTypeChecked`
-- Optionally add `...tseslint.configs.stylisticTypeChecked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and update the config:
+- 💅 **Modern UI/UX**
+  - Responsive design with Tailwind CSS
+  - Optimized performance
+  - Intuitive user interface
+  - Dark mode support
 
-```js
-// eslint.config.js
-import react from 'eslint-plugin-react'
+- 🛠️ **Developer Experience**
+  - TypeScript for type safety
+  - Hot Module Replacement (HMR)
+  - Comprehensive API documentation with Swagger
+  - Docker containerization
 
-export default tseslint.config({
-  // Set the react version
-  settings: { react: { version: '18.3' } },
-  plugins: {
-    // Add the react plugin
-    react,
-  },
-  rules: {
-    // other rules...
-    // Enable its recommended rules
-    ...react.configs.recommended.rules,
-    ...react.configs['jsx-runtime'].rules,
-  },
-})
-```
+## 🚀 Tech Stack
+
+### Frontend
+- React 18 with TypeScript
+- Redux Toolkit for state management
+- Vite for fast development
+- Tailwind CSS for styling
+- React Router for navigation
+
+### Backend
+- Node.js with Express
+- MongoDB with Mongoose
+- JWT for authentication
+- Swagger for API documentation
+
+### DevOps
+- Docker & Docker Compose
+- ESLint & TypeScript ESLint
+- Git workflow
+- Environment configuration
+
+## 🏗️ Architecture
+
+## Getting Started
+
+### Prerequisites
+
+- Node.js (v18 or later)
+- Docker (optional, for containerization)
+- MongoDB (local or cloud instance)
+
+### Installation
+
+1. **Clone the repository:**
+
+   ```bash
+   git clone https://github.com/irtaza302/ecommerce-store.git
+   cd ecommerce-store
+   ```
+
+2. **Install dependencies:**
+
+   ```bash
+   npm install
+   ```
+
+3. **Set up environment variables:**
+
+   Create a `.env` file in the root directory and add your MongoDB URI and JWT secret:
+
+   ```env
+   MONGO_URI=your-mongo-uri
+   JWT_SECRET=your-jwt-secret
+   ```
+
+4. **Run the application:**
+
+   - **Development mode:**
+
+     ```bash
+     npm run dev:all
+     ```
+
+   - **Build for production:**
+
+     ```bash
+     npm run build
+     ```
+
+   - **Run with Docker:**
+
+     ```bash
+     docker-compose up
+     ```
+
+## Usage
+
+- Access the application at `http://localhost:5173`.
+- API documentation is available at `http://localhost:5000/api-docs`.
+
+## Scripts
+
+- `npm run dev`: Start the frontend development server.
+- `npm run dev:server`: Start the backend server with nodemon.
+- `npm run dev:all`: Start both frontend and backend servers concurrently.
+- `npm run build`: Build the frontend for production.
+- `npm run lint`: Run ESLint.
+- `npm run preview`: Preview the production build.
+
+## Contributing
+
+Contributions are welcome! Please fork the repository and submit a pull request for any improvements or bug fixes.
+
+## License
+
+This project is licensed under the MIT License.
+
+## Contact
+
+For any questions or support, please contact [support@ecomstore.com](mailto:support@ecomstore.com).

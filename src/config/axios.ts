@@ -28,10 +28,14 @@ instance.interceptors.response.use(
   (response) => response,
   (error) => {
     if (error.response?.status === 401) {
-      // Token expired or invalid
-      store.dispatch(clearUser());
-      localStorage.removeItem('token');
-      window.location.href = '/login';
+      // Only clear if token exists but is invalid
+      const token = localStorage.getItem('token');
+      if (token) {
+        store.dispatch(clearUser());
+        localStorage.removeItem('token');
+        localStorage.removeItem('user');
+        window.location.href = '/login';
+      }
     }
     return Promise.reject(error);
   }
