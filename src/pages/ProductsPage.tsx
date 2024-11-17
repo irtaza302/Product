@@ -1,6 +1,6 @@
 import React from 'react';
-import { MemoizedProductCard } from '../components/product/ProductCard';
-import { useGetProductsQuery } from '../store/api/productsApi';
+import { MemoizedProductCard } from '../components';
+import { useGetProductsQuery } from '../store/api';
 import { Loader2 } from 'lucide-react';
 
 const ProductsPage: React.FC = () => {

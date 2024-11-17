@@ -9,7 +9,7 @@
     "outDir": "./dist",
     "rootDir": "./src"
   },
-  "include": ["src/server/**/*"],
+  "include": ["src/server/**/*", "src/models/**/*", "src/types/**/*", "src/constants/**/*"],
   "ts-node": {
     "esm": true
   }
