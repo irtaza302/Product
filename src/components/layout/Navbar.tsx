@@ -4,7 +4,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { RootState } from '../../store';
 import { clearUser } from '../../store/slices/authSlice';
 import { clearCart } from '../../store/slices/cartSlice';
-import { ShoppingCart, LogOut, Menu, X, User, ChevronDown } from 'lucide-react';
+import { ShoppingCart, LogOut, Menu, X, ChevronDown } from 'lucide-react';
 import type { CartItem } from '../../types';
 import { UI_CONSTANTS } from '@constants/uiConstants';
 
