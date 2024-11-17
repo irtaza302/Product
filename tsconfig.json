@@ -1,15 +1,14 @@
 {
-  "files": [],
-  "references": [
-    { "path": "./tsconfig.app.json" },
-    { "path": "./tsconfig.node.json" }
-  ],
   "compilerOptions": {
+    "baseUrl": ".",
     "paths": {
       "@constants/*": ["./public/constants/*"]
     }
   },
-  "moduleResolution": "node",
-  "baseUrl": "."
+  "files": [],
+  "references": [
+    { "path": "./tsconfig.app.json" },
+    { "path": "./tsconfig.node.json" }
+  ]
 }
 

@@ -1,5 +1,5 @@
 import swaggerJsdoc from 'swagger-jsdoc';
-import { SWAGGER_CONSTANTS } from '../../constants/swaggerConstants.js';
+import { SWAGGER_CONSTANTS } from '@constants/swaggerConstants';
 
 const options = {
   definition: {
