@@ -16,7 +16,7 @@ const products = [
     name: 'Wireless Headphones',
     description: 'High-quality wireless headphones with noise cancellation',
     price: 199.99,
-    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e',
+    image: 'https://images.unsplash.com/photo-1505740420928-5e560c06d30e?auto=format&fit=crop&w=800&q=80',
     category: 'Electronics',
     stock: 50
   },
