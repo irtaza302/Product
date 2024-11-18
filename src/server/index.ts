@@ -38,7 +38,7 @@ const startServer = async () => {
     });
   } catch (error) {
     console.error('Failed to start server:', error);
-    throw error; // Let Vercel handle the error
+    throw error;
   }
 };
 
