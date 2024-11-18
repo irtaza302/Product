@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { MemoizedProductCard } from '../components';
 import { useGetProductsQuery } from '../store/api';
-import { Search, SlidersHorizontal, X } from 'lucide-react';
+import { Search, X } from 'lucide-react';
 
 const ProductsPage: React.FC = () => {
   const [searchTerm, setSearchTerm] = useState('');
@@ -108,37 +108,24 @@ const ProductsPage: React.FC = () => {
                       setSelectedIndex(-1);
                     }}
                     onBlur={() => {
-                      // Delay to allow click events on suggestions
                       setTimeout(() => setIsFocused(false), 200);
                     }}
                     onKeyDown={handleKeyDown}
-                    className="w-full px-4 py-3 text-gray-700 bg-transparent border-none rounded-l-xl focus:outline-none focus:ring-0 placeholder-gray-400"
+                    className="w-full px-4 py-3 text-gray-700 bg-transparent border-none rounded-xl focus:outline-none focus:ring-0 placeholder-gray-400"
                   />
                   {searchTerm && (
                     <button
                       onClick={handleClearSearch}
-                      className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 mr-1"
+                      className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 mr-2"
                       aria-label="Clear search"
                     >
                       <X className="w-4 h-4 text-gray-400" />
                     </button>
                   )}
                 </div>
-                
-                {/* Filter Button */}
-                <div className="flex items-center pr-2">
-                  <div className="h-6 w-px bg-gray-200 mx-2"></div>
-                  <button 
-                    className="p-2 hover:bg-gray-100 rounded-full transition-colors duration-200 flex items-center gap-2 text-gray-600"
-                    aria-label="Filter options"
-                  >
-                    <SlidersHorizontal className="w-4 h-4" />
-                    <span className="text-sm hidden sm:inline">Filters</span>
-                  </button>
-                </div>
               </div>
 
-              {/* Search Suggestions - Show when focused and has input */}
+              {/* Search Suggestions */}
               {isFocused && searchTerm && (
                 <div className="absolute w-full mt-2 bg-white rounded-lg shadow-lg border border-gray-200 py-2 z-50">
                   <div className="px-4 py-2 text-xs font-medium text-gray-500 uppercase">

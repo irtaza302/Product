@@ -6,9 +6,10 @@
       "use": "@vercel/node",
       "config": {
         "includeFiles": [
-          "src/constants/**/*",
+          "public/constants/**/*",
           "src/models/**/*",
-          "src/types/**/*"
+          "src/types/**/*",
+          "src/constants/**/*"
         ]
       }
     },

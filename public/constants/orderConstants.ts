@@ -17,4 +17,10 @@ export const ORDER_CONSTANTS = {
     DOWNLOAD_INVOICE: 'Download Invoice',
     CONTINUE_SHOPPING: 'Continue Shopping',
   },
+  STATUS: {
+    PENDING: 'pending',
+    PROCESSING: 'processing',
+    SHIPPED: 'shipped',
+    DELIVERED: 'delivered',
+  },
 } as const; 
