@@ -3,7 +3,7 @@ import { Product } from '../../types';
 import { ShoppingCart, Heart, Star, Loader2 } from 'lucide-react';
 import { PRODUCT_CONSTANTS } from '../../../public/constants/productConstants';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
-import { addToCart } from '@/store/slices/cartSlice';
+import { addToCart } from '@/store/slices/cart-slice/cartSlice';
 import { useUpdateCartMutation } from '@/store/api/cart-api';
 import { useSelector } from 'react-redux';
 import { RootState } from '@/store';

@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import { useDispatch } from 'react-redux';
-import { setUser } from '@/store/slices/authSlice';
+import { setUser } from '@/store/slices/auth-slice/authSlice';
 
 export const AuthPersist: React.FC = () => {
   const dispatch = useDispatch();

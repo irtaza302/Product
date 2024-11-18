@@ -2,12 +2,12 @@ import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Mail, Lock } from 'lucide-react';
 import { authService } from '@/services/auth-service';
-import { setUser } from '@/store/slices/authSlice';
+import { setUser } from '@/store/slices/auth-slice/authSlice';
 import { Input, Button } from '@/components/common';
 import { validateEmail } from '@/utils/validation';
 import { useAppDispatch } from '@/hooks/use-app-dispatch';
 import { useGetCartQuery } from '@/store/api';
-import { updateCartFromServer } from '@/store/slices/cartSlice';
+import { updateCartFromServer } from '@/store/slices/cart-slice/cartSlice';
 import { AUTH_CONSTANTS } from '@constants/authConstants';
 
 export const LoginForm: React.FC = () => {

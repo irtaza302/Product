@@ -1,6 +1,6 @@
 import axios from 'axios';
 import { store } from '../../store';
-import { clearUser } from '@store/slices/authSlice';
+import { clearUser } from '@/store/slices/auth-slice/authSlice';
 
 const instance = axios.create({
   baseURL: 'http://localhost:5000/api',

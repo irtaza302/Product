@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../../store';
 import { useAppDispatch } from '../../hooks/use-app-dispatch';
-import { clearCart } from '../../store/slices/cartSlice';
+import { clearCart } from '../../store/slices/cart-slice/cartSlice';
 import { useCreateOrderMutation } from '../../store/api';
 import { useUpdateCartMutation } from '../../store/api/cart-api';
 import { LoadingSpinner } from '../../components';

@@ -3,7 +3,7 @@ import { useSelector } from 'react-redux';
 import { RootState } from '../../../store';
 import { useGetCartQuery } from '../../../store/api/cart-api';
 import { useAppDispatch } from '../../../hooks/use-app-dispatch';
-import { updateCartFromServer } from '../../../store/slices/cartSlice';
+import { updateCartFromServer } from '../../../store/slices/cart-slice/cartSlice';
 
 export const CartInitializer: React.FC = () => {
   const auth = useSelector((state: RootState) => state.auth);
