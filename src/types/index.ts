@@ -1,4 +1,4 @@
-import { ORDER_STATUS } from '../constants';
+import { ORDER_STATUS } from '../constants/index';
 import type { UserDocument } from '../models/User.js';
 
 // Public user type (without sensitive data)
