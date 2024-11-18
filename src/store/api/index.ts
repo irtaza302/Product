@@ -1,4 +1,4 @@
-export { baseApi } from './baseApi';
-export { cartApi, useGetCartQuery, useUpdateCartMutation } from './cartApi';
-export { ordersApi, useCreateOrderMutation } from './ordersApi';
-export { productsApi, useGetProductsQuery, useGetProductQuery, useCheckStockQuery } from './productsApi'; 
+export { baseApi } from './base-api';
+export { cartApi, useGetCartQuery, useUpdateCartMutation } from './cart-api';
+export { ordersApi, useCreateOrderMutation } from './orders-api';
+export { productsApi, useGetProductsQuery, useGetProductQuery, useCheckStockQuery } from './product-api'; 
