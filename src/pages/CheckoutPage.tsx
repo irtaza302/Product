@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { RootState } from '../store';
+import { useAppDispatch } from '../hooks/useAppDispatch';
 import { clearCart } from '../store/slices/cartSlice';
 import { useCreateOrderMutation } from '../store/api';
+import { useUpdateCartMutation } from '../store/api/cartApi';
 import { LoadingSpinner } from '../components';
 import { validateShippingDetails } from '../utils';
 import { useStockCheck } from '../hooks';
@@ -11,6 +13,8 @@ import type { ShippingDetails } from '../types';
 
 const CheckoutPage: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart);
+  const auth = useSelector((state: RootState) => state.auth);
+  const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [error, setError] = useState('');
   const [shippingDetails, setShippingDetails] = useState<ShippingDetails>({
@@ -23,6 +27,7 @@ const CheckoutPage: React.FC = () => {
 
   const [createOrder, { isLoading: isProcessing }] = useCreateOrderMutation();
   const checkStockForItems = useStockCheck();
+  const [updateCart] = useUpdateCartMutation();
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -58,7 +63,19 @@ const CheckoutPage: React.FC = () => {
       }).unwrap();
 
       if (response.success) {
-        clearCart();
+        // Clear local cart state
+        dispatch(clearCart());
+        
+        // Clear server-side cart if authenticated
+        if (auth.isAuthenticated) {
+          try {
+            await updateCart({ items: [], total: 0 }).unwrap();
+          } catch (err) {
+            console.error('Failed to clear server cart:', err);
+            // Continue with checkout even if server cart clear fails
+          }
+        }
+
         navigate('/order-success', { 
           state: { 
             orderDetails: {
@@ -72,7 +89,9 @@ const CheckoutPage: React.FC = () => {
         });
       }
     } catch (err) {
-      setError(err instanceof Error ? err.message : 'Failed to process order');
+      const errorMessage = err instanceof Error ? err.message : 'Failed to process order';
+      setError(errorMessage);
+      console.error('Checkout error:', err);
     }
   };
 

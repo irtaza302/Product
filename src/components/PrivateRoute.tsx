@@ -1,14 +1,37 @@
 import React from 'react';
+import { Navigate, useLocation } from 'react-router-dom';
+import { useSelector } from 'react-redux';
 import { UnauthorizedError } from '../components/errors/UnauthorizedError';
+import type { RootState } from '../store';
 
-const PrivateRoute: React.FC<{ requireAuth: boolean }> = ({ requireAuth }) => {
-  const isAuthenticated = true; // Replace with actual authentication logic
+interface PrivateRouteProps {
+  children: React.ReactNode;
+  requireAuth: boolean;
+}
 
-  if (!isAuthenticated) {
+const PrivateRoute: React.FC<PrivateRouteProps> = ({ children, requireAuth }) => {
+  const { isAuthenticated } = useSelector((state: RootState) => state.auth);
+  const location = useLocation();
+
+  // If authentication is required but user is not authenticated
+  if (requireAuth && !isAuthenticated) {
+    // Redirect to login with return URL
+    return <Navigate to="/login" state={{ from: location }} replace />;
+  }
+
+  // If authentication is not required but user is authenticated
+  if (!requireAuth && isAuthenticated) {
+    // Redirect to home or dashboard
+    return <Navigate to="/" replace />;
+  }
+
+  // If there's an error with authentication
+  if (requireAuth && !isAuthenticated) {
     return <UnauthorizedError />;
   }
 
-  return null;
+  // Render children if all conditions are met
+  return <>{children}</>;
 };
 
 export default PrivateRoute; 
