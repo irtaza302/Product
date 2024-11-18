@@ -136,4 +136,4 @@ This project is licensed under the MIT License.
 
 ## Contact
 
-For any questions or support, please contact [support@ecomstore.com](mailto:support@ecomstore.com).
+For any questions or support, please contact [malikirtaza96@gmail.com](malikirtaza96@gmail.com).
