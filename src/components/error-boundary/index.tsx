@@ -1,5 +1,5 @@
 import { Component, ErrorInfo, ReactNode } from 'react';
-import { ServerError } from '../errors/ServerError';
+import { ServerError } from '@/components/errors/server-error';
 
 interface Props {
   children: ReactNode;

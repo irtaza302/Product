@@ -1,8 +1,8 @@
 import React from 'react';
 import { Navigate, useLocation } from 'react-router-dom';
 import { useSelector } from 'react-redux';
-import { UnauthorizedError } from '../errors/UnauthorizedError';
-import type { RootState } from '../../store';
+import { UnauthorizedError } from '@/components/errors/unauthorized-error';
+import type { RootState } from '@/store';
 
 interface PrivateRouteProps {
   children: React.ReactNode;

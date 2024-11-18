@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorPage } from '../error-page';
+import { ErrorPage } from '@/components/error-page';
 
 export const NotFoundError: React.FC = () => {
   return (
