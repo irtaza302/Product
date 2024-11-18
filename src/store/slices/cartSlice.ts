@@ -1,6 +1,6 @@
 import { createSlice, PayloadAction } from '@reduxjs/toolkit';
 import type { CartItem, Product } from '../../types';
-import { calculateCartTotal } from '../../utils/cartUtils';
+import { calculateCartTotal } from '../../utils/cart-utils';
 import { clearUser } from './authSlice';
 
 interface CartState {

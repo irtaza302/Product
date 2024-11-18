@@ -3,7 +3,7 @@ export { FORM_CONSTANTS } from './formConstants';
 export { MESSAGES } from './messages';
 export { ORDER_CONSTANTS } from './orderConstants';
 export { PAGE_CONSTANTS } from './pageConstants';
-export { PRODUCT_CONSTANTS } from './productConstants';
+export { PRODUCT_CONSTANTS } from '@constants/productConstants';
 export { SWAGGER_CONSTANTS } from './swaggerConstants';
 export { UI_CONSTANTS } from './uiConstants';
 

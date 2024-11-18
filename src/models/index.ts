@@ -1,4 +1,4 @@
-export { default as Product } from './Product.js';
-export { Order } from './Order.js';
-export { UserModel } from './User.js';
-export type { UserDocument, IUser } from './User.js'; 
+export { default as Product } from './product/index.ts';
+export { Order } from './order/index.ts';
+export { UserModel } from './user/index.ts';
+export type { UserDocument, IUser } from './user/index.ts'; 

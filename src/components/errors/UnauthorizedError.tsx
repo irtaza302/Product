@@ -1,5 +1,5 @@
 import React from 'react';
-import { ErrorPage } from '../ErrorPage';
+import { ErrorPage } from '../error-page';
 import { useNavigate } from 'react-router-dom';
 
 export const UnauthorizedError: React.FC = () => {

@@ -7,30 +7,45 @@ interface AuthState {
   loading: boolean;
 }
 
-const loadAuthFromStorage = () => {
+// Define initial state first
+const initialState: AuthState = {
+  user: null,
+  isAuthenticated: false,
+  loading: false
+};
+
+const loadAuthFromStorage = (): AuthState => {
   try {
-    const user = localStorage.getItem('user');
+    const userStr = localStorage.getItem('user');
     const token = localStorage.getItem('token');
+    
+    if (!userStr || !token) {
+      return initialState;
+    }
+
+    const user = JSON.parse(userStr);
     return {
-      user: user ? JSON.parse(user) : null,
-      isAuthenticated: !!token,
-      loading: false,
+      user,
+      isAuthenticated: true,
+      loading: false
     };
   } catch (error) {
     console.error('Error loading auth from localStorage:', error);
+    // Clear potentially corrupted data
+    localStorage.removeItem('user');
+    localStorage.removeItem('token');
     return initialState;
   }
 };
 
-const initialState: AuthState = loadAuthFromStorage();
-
 export const authSlice = createSlice({
   name: 'auth',
-  initialState,
+  initialState: loadAuthFromStorage(),
   reducers: {
     setUser: (state, action: PayloadAction<User>) => {
       state.user = action.payload;
       state.isAuthenticated = true;
+      // Store as JSON string
       localStorage.setItem('user', JSON.stringify(action.payload));
     },
     clearUser: (state) => {
