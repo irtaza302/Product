@@ -1,7 +1,7 @@
 import express from 'express';
-import { UserModel } from '../../../models/user/index.js';
-import { auth, optionalAuth, AuthRequest } from '../../middleware/auth/index.js';
-import type { ErrorResponse } from '../../../types/index.js';
+import { UserModel } from '@/models/user/index.js';
+import { auth, optionalAuth, AuthRequest } from '@/server/middleware/auth/index.js';
+import type { ErrorResponse } from '@/types/index.js';
 
 const router = express.Router();
 

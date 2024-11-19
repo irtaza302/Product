@@ -1,8 +1,8 @@
 import express from 'express';
-import { Order, Product } from '../../../models/index.js';
-import type { ErrorResponse } from '../../../types/index.js';
-import { AuthRequest, optionalAuth } from '../../middleware/auth/index.js';
-import type { ProductDocument } from '../../../models/product/index.js';
+import { Order, Product } from '@/models/index.js';
+import type { ErrorResponse } from '@/types/index.js';
+import { AuthRequest, optionalAuth } from '@/server/middleware/auth/index.js';
+import type { ProductDocument } from '@/models/product/index.js';
 const router = express.Router();
 
 /**

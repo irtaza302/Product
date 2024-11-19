@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react';
 import { useSelector } from 'react-redux';
-import { removeFromCart, updateQuantity } from '../../store/slices/cart-slice/cartSlice';
-import { RootState } from '../../store';
-import { useAppDispatch } from '../../hooks';
+import { removeFromCart, updateQuantity } from '@/store/slices/cart-slice/cartSlice';
+import { RootState } from '@/store';
+import { useAppDispatch } from '@/hooks';
 import { useNavigate } from 'react-router-dom';
-import { Button } from '../../components';
-import { calculateCartTotal } from '../../utils';
-import { useUpdateCartMutation } from '../../store/api';
+import { Button } from '@/components';
+import { calculateCartTotal } from '@/utils';
+import { useUpdateCartMutation } from '@/store/api';
 import { PAGE_CONSTANTS } from '@constants/pageConstants';
 
 import { 

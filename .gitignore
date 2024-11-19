@@ -18,6 +18,8 @@ build
 .env.test.local
 .env.production.local
 .vercel
+.env.example
+.env
 pass.txt
 
 npm-debug.log*

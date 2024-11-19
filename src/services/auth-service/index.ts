@@ -1,5 +1,5 @@
 import axios from 'axios';
-import type { AuthResponse } from '../../types/index.js';
+import type { AuthResponse } from '@/types/index.js';
 
 const API_URL = process.env.NODE_ENV === 'production'
   ? 'https://product-mru.vercel.app/api'

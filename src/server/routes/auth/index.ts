@@ -1,7 +1,7 @@
 import express from 'express';
 import jwt from 'jsonwebtoken';
-import { UserModel } from '../../../models/user/index.js';
-import type { ErrorResponse } from '../../../types/index.js';
+import { UserModel } from '@/models/user/index.js';
+import type { ErrorResponse } from '@/types/index.js';
 
 const router = express.Router();
 
