@@ -1,5 +1,5 @@
 import mongoose, { Schema, Document } from 'mongoose';
-import type { OrderItem, ShippingDetails } from '../../types';
+import type { OrderItem, ShippingDetails } from '@/types';
 // Create an interface for the Order document
 interface OrderDocument extends Document {
   user: mongoose.Types.ObjectId;

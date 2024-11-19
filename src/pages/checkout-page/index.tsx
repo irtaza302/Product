@@ -1,15 +1,15 @@
 import React, { useState } from 'react';
 import { useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { RootState } from '../../store';
-import { useAppDispatch } from '../../hooks/use-app-dispatch';
-import { clearCart } from '../../store/slices/cart-slice/cartSlice';
-import { useCreateOrderMutation } from '../../store/api';
-import { useUpdateCartMutation } from '../../store/api/cart-api';
-import { LoadingSpinner } from '../../components';
-import { validateShippingDetails } from '../../utils';
-import { useStockCheck } from '../../hooks';
-import type { ShippingDetails } from '../../types';
+import { RootState } from '@/store';
+import { useAppDispatch } from '@/hooks/use-app-dispatch';
+import { clearCart } from '@/store/slices/cart-slice/cartSlice';
+import { useCreateOrderMutation } from '@/store/api';
+import { useUpdateCartMutation } from '@/store/api/cart-api';
+import { LoadingSpinner } from '@/components';
+import { validateShippingDetails } from '@/utils';
+import { useStockCheck } from '@/hooks';
+import type { ShippingDetails } from '@/types';
 
 const CheckoutPage: React.FC = () => {
   const cart = useSelector((state: RootState) => state.cart);

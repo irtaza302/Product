@@ -1,5 +1,5 @@
-import { ORDER_STATUS } from '../constants/index';
-import type { UserDocument } from '../models/user/index.js';
+import { ORDER_STATUS } from '../../public/constants';
+import type { UserDocument } from '@/models/user/index.js';
 
 // Public user type (without sensitive data)
 export type User = Pick<UserDocument, 'id' | 'name' | 'email'>;

@@ -1,5 +1,5 @@
 import { baseApi } from '../base-api';
-import type { CartItem } from '../../../types';
+import type { CartItem } from '@/types';
 
 interface CartResponse {
   items: CartItem[];

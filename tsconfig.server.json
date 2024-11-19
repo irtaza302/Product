@@ -7,13 +7,21 @@
     "strict": true,
     "skipLibCheck": true,
     "outDir": "./dist",
-    "rootDir": "./src",
+    "rootDir": ".",
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
-    }
+      "@/*": ["./src/*"],
+      "@constants/*": ["./public/constants/*"]
+    },
+    "allowJs": true,
+    "resolveJsonModule": true
   },
-  "include": ["src/server/**/*", "src/models/**/*", "src/types/**/*", "src/constants/**/*"],
+  "include": [
+    "src/server/**/*", 
+    "src/models/**/*", 
+    "src/types/**/*", 
+    "public/constants/**/*"
+  ],
   "ts-node": {
     "esm": true
   }

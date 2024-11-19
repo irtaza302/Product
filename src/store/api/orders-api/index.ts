@@ -1,5 +1,5 @@
 import { baseApi } from '../base-api';
-import type { Order, OrderItem, ShippingDetails } from '../../../types';
+import type { Order, OrderItem, ShippingDetails } from '@/types';
 
 interface CreateOrderRequest {
   items: OrderItem[];

@@ -1,7 +1,7 @@
 import React, { useRef } from 'react';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { CheckCircleIcon, PrinterIcon, HomeIcon } from '@heroicons/react/24/outline';
-import { Button, Invoice } from '../../components';
+import { Button, Invoice } from '@/components';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 
